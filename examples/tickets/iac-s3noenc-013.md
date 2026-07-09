@@ -1,0 +1,26 @@
+# [MEDIUM] S3 bucket missing server-side encryption
+
+- **Finding ID:** iac-s3noenc-013
+- **Scanner:** trivy (IAC)
+- **Rule:** AVD-AWS-0088
+- **Location:** `target/infra/main.tf:4`
+- **CWE:** CWE-311
+- **Verdict:** true_positive
+- **Severity:** medium
+- **Confidence:** 0.75
+- **Recommended action:** draft_pr
+- **Owner:** cloud-infra-security
+
+## Business impact
+Data stored in this S3 bucket would be unencrypted at rest, risking non-compliance with PCI-DSS and data-protection requirements if sensitive data is ever placed there.
+
+## Reasoning
+The Terraform resource for an S3 bucket lacks a server-side encryption configuration (missing aws_s3_bucket_server_side_encryption_configuration or equivalent). While this is not an internet-facing exploit, storage of unencrypted data at rest is a real compliance/security gap under CWE-311 and A02:2021 (Cryptographic Failures). Severity is elevated from the scanner's LOW rating to MEDIUM given this is a payments company where buckets often end up holding sensitive transaction, KYC, or log data, and lack of default encryption is a concrete control gap rather than a hypothetical. It is not critical/high because encryption at rest alone (absent this control) does not directly expose data without additional compromise (e.g., IAM misconfig or public access), and AWS-managed default encryption may partially mitigate. This is a deterministic, well-understood fix suitable for automated remediation.
+
+## Remediation
+Add an aws_s3_bucket_server_side_encryption_configuration block (or use bucket_encryption on newer provider versions) enforcing at least AES256, or preferably aws:kms with a customer-managed KMS key for buckets handling sensitive/cardholder-adjacent data. Also enable bucket versioning and block public access as defense-in-depth if not already present.
+
+## Offending code
+```
+resource "aws_s3_bucket" "data" {
+```

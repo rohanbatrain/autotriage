@@ -1,0 +1,3 @@
+target/app.py @appsec-team @payments-team
+target/infra/ @infra-platform
+* @security-oncall

@@ -1,0 +1,80 @@
+# PEP 621 project metadata + tooling config.
+# Standards enforced here: PEP 8 (ruff), PEP 257 (pydocstyle via ruff "D"),
+# PEP 484 type hints (mypy strict), and pytest for the eval/unit suite.
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autotriage"
+version = "0.1.0"
+description = "Autonomous vulnerability triage & remediation agent (Claude Agent SDK)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Rohan Batra" }]
+keywords = ["security", "sast", "dast", "llm-agent", "triage", "claude"]
+dependencies = [
+    "pydantic>=2.6",
+]
+
+# Optional extras keep the core install (schema/scanners/eval) working even if
+# the agent runtime is unavailable in a given environment.
+[project.optional-dependencies]
+agent = [
+    "claude-agent-sdk>=0.1.0",
+    "anthropic>=0.40.0",
+]
+dev = [
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pytest>=8.0",
+]
+
+[project.scripts]
+autotriage = "autotriage.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# Ship the PEP 561 marker so downstream consumers get our type hints.
+[tool.setuptools.package-data]
+autotriage = ["py.typed"]
+
+# ---------------------------------------------------------------------------
+# Ruff: linting + formatting (replaces black/flake8/isort). PEP 8 + PEP 257.
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+src = ["src", "tests"]
+# The intentionally-vulnerable target app must NOT be linted or type-checked.
+extend-exclude = ["target"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "D", "UP", "B", "SIM", "ANN", "PL"]
+ignore = ["D203", "D213"]  # resolve the two well-known pydocstyle conflicts
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D100", "D103", "ANN201", "PLR2004"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+# ---------------------------------------------------------------------------
+# mypy: strict static typing (PEP 484).
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+exclude = ["target/"]
+
+[[tool.mypy.overrides]]
+module = ["claude_agent_sdk.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

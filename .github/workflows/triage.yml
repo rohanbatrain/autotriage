@@ -1,0 +1,55 @@
+name: Security triage
+
+on:
+  pull_request:
+
+jobs:
+  scan-and-triage:
+    name: Scan and triage findings
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install AutoTriage (agent extras)
+        run: pip install -e ".[agent]"
+
+      # --- Scanners -------------------------------------------------------
+      - name: Install Semgrep
+        run: pip install semgrep
+
+      - name: Install Trivy
+        uses: aquasecurity/setup-trivy@v0.2.0
+
+      - name: Install Gitleaks
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/gitleaks/gitleaks/master/scripts/install.sh \
+            | sh -s -- -b "$RUNNER_TEMP/bin"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      # --- Scan -> triage -------------------------------------------------
+      - name: Run scanners
+        run: python -m autotriage.scanners . -o findings.json
+
+      - name: Triage findings (dry run)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python -m autotriage --findings findings.json --dry-run
+
+      # --- Publish results ------------------------------------------------
+      - name: Upload triage summary and tickets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: triage-summary
+          path: |
+            findings.json
+            TRACKER.md
+            tickets/
+          if-no-files-found: ignore

@@ -1,0 +1,26 @@
+# [HIGH] Weak MD5 hash used for passwords
+
+- **Finding ID:** sast-md5-005
+- **Scanner:** semgrep (SAST)
+- **Rule:** python.lang.security.audit.md5-used-as-password.md5-used-as-password
+- **Location:** `target/app.py:71`
+- **CWE:** CWE-327, CWE-916
+- **Verdict:** true_positive
+- **Severity:** high
+- **Confidence:** 0.85
+- **Recommended action:** draft_pr
+- **Owner:** app-security / backend-auth-team
+
+## Business impact
+Customer account passwords hashed with a broken algorithm could be cracked en masse if the password database is ever leaked, leading to account takeover across the platform.
+
+## Reasoning
+MD5 is a fast, unsalted hash function that is trivially reversible via rainbow tables and GPU brute-force, making it unsuitable for password storage. This directly affects authentication security for a payments platform, where account takeover can lead to fraud or unauthorized fund movement. While the raw scanner severity is a WARNING, given this touches authentication/password storage I elevate it to high severity. Confidence is not maximal because I cannot fully confirm from the snippet alone whether this is the actual login path or legacy/test code, but the pattern (hashlib.md5 on password) is a strong, unambiguous anti-pattern warranting remediation regardless.
+
+## Remediation
+Replace MD5 with a memory-hard, adaptive password hashing algorithm such as bcrypt, scrypt, or Argon2id with a unique per-user salt and appropriate work factor. Ensure a migration path to re-hash existing passwords on next successful login.
+
+## Offending code
+```
+hashlib.md5(password.encode()).hexdigest()
+```

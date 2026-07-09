@@ -1,0 +1,17 @@
+[
+  { "finding_id": "sast-sqli-001", "expected_verdict": "true_positive", "expected_severity": "high" },
+  { "finding_id": "secret-awskey-002", "expected_verdict": "true_positive", "expected_severity": "critical" },
+  { "finding_id": "sast-cmdinj-003", "expected_verdict": "true_positive", "expected_severity": "high" },
+  { "finding_id": "sast-eval-004", "expected_verdict": "true_positive", "expected_severity": "high" },
+  { "finding_id": "sast-md5-005", "expected_verdict": "true_positive", "expected_severity": "medium" },
+  { "finding_id": "sast-pickle-006", "expected_verdict": "true_positive", "expected_severity": "high" },
+  { "finding_id": "sast-flaskdebug-007", "expected_verdict": "true_positive", "expected_severity": "medium" },
+  { "finding_id": "sca-requests-008", "expected_verdict": "true_positive", "expected_severity": "high" },
+  { "finding_id": "sca-pyyaml-009", "expected_verdict": "true_positive", "expected_severity": "critical" },
+  { "finding_id": "sca-flask-010", "expected_verdict": "true_positive", "expected_severity": "medium" },
+  { "finding_id": "iac-s3public-011", "expected_verdict": "true_positive", "expected_severity": "high" },
+  { "finding_id": "iac-sgopen-012", "expected_verdict": "true_positive", "expected_severity": "high" },
+  { "finding_id": "iac-s3noenc-013", "expected_verdict": "true_positive", "expected_severity": "low" },
+  { "finding_id": "sast-sqli-fp-014", "expected_verdict": "false_positive", "expected_severity": "info" },
+  { "finding_id": "secret-fp-015", "expected_verdict": "false_positive", "expected_severity": "info" }
+]

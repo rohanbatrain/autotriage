@@ -1,0 +1,30 @@
+# Secrets — never commit
+.env
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Tooling caches
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Runtime-generated artifacts (root working dir only; examples/ is committed)
+/findings.json
+/tickets/
+/pull_requests/
+/TRACKER.md
+/evals/report.md
+*.err
+
+# OS
+.DS_Store

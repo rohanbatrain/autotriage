@@ -1,0 +1,3908 @@
+[
+  {
+    "id": "cc87f905d0d7",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "generic.secrets.security.detected-aws-access-key-id-value.detected-aws-access-key-id-value",
+    "title": "AWS Access Key ID Value detected. This is a sensitive credential and should not be hardcoded here. Instead, read this value from an environment variable or keep it in a separate, private file.",
+    "severity_raw": "ERROR",
+    "cwe": [
+      "CWE-798"
+    ],
+    "owasp": [
+      "A07:2021",
+      "A07:2025"
+    ],
+    "file": "target/app.py",
+    "line": 18,
+    "code_snippet": "requires login",
+    "description": "AWS Access Key ID Value detected. This is a sensitive credential and should not be hardcoded here. Instead, read this value from an environment variable or keep it in a separate, private file.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "generic.secrets.security.detected-aws-access-key-id-value.detected-aws-access-key-id-value",
+      "path": "target/app.py",
+      "start": {
+        "line": 18,
+        "col": 22,
+        "offset": 685
+      },
+      "end": {
+        "line": 18,
+        "col": 42,
+        "offset": 705
+      },
+      "extra": {
+        "message": "AWS Access Key ID Value detected. This is a sensitive credential and should not be hardcoded here. Instead, read this value from an environment variable or keep it in a separate, private file.",
+        "metadata": {
+          "cwe": [
+            "CWE-798: Use of Hard-coded Credentials"
+          ],
+          "source-rule-url": "https://github.com/grab/secret-scanner/blob/master/scanner/signatures/pattern.go",
+          "category": "security",
+          "technology": [
+            "secrets",
+            "aws"
+          ],
+          "confidence": "LOW",
+          "owasp": [
+            "A07:2021 - Identification and Authentication Failures",
+            "A07:2025 - Authentication Failures"
+          ],
+          "references": [
+            "https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures"
+          ],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": [
+            "audit"
+          ],
+          "likelihood": "LOW",
+          "impact": "HIGH",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Hard-coded Secrets"
+          ],
+          "source": "https://semgrep.dev/r/generic.secrets.security.detected-aws-access-key-id-value.detected-aws-access-key-id-value",
+          "shortlink": "https://sg.run/GeD1"
+        },
+        "severity": "ERROR",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "6b1a3dd05e38",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.django.security.injection.sql.sql-injection-using-db-cursor-execute.sql-injection-db-cursor-execute",
+    "title": "User-controlled data from a request is passed to 'execute()'. This could lead to a SQL injection and therefore protected information could be leaked. Instead, use django's QuerySets, which are built with query parameterization and therefore not vulnerable to sql injection. For example, you could use `Entry.objects.filter(date=2006)`.",
+    "severity_raw": "WARNING",
+    "cwe": [
+      "CWE-89"
+    ],
+    "owasp": [
+      "A01:2017",
+      "A03:2021",
+      "A05:2025"
+    ],
+    "file": "target/app.py",
+    "line": 35,
+    "code_snippet": "requires login",
+    "description": "User-controlled data from a request is passed to 'execute()'. This could lead to a SQL injection and therefore protected information could be leaked. Instead, use django's QuerySets, which are built with query parameterization and therefore not vulnerable to sql injection. For example, you could use `Entry.objects.filter(date=2006)`.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.django.security.injection.sql.sql-injection-using-db-cursor-execute.sql-injection-db-cursor-execute",
+      "path": "target/app.py",
+      "start": {
+        "line": 35,
+        "col": 5,
+        "offset": 1072
+      },
+      "end": {
+        "line": 44,
+        "col": 69,
+        "offset": 1464
+      },
+      "extra": {
+        "message": "User-controlled data from a request is passed to 'execute()'. This could lead to a SQL injection and therefore protected information could be leaked. Instead, use django's QuerySets, which are built with query parameterization and therefore not vulnerable to sql injection. For example, you could use `Entry.objects.filter(date=2006)`.",
+        "metadata": {
+          "cwe": [
+            "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+          ],
+          "owasp": [
+            "A01:2017 - Injection",
+            "A03:2021 - Injection",
+            "A05:2025 - Injection"
+          ],
+          "references": [
+            "https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection"
+          ],
+          "category": "security",
+          "technology": [
+            "django"
+          ],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": [
+            "vuln"
+          ],
+          "likelihood": "MEDIUM",
+          "impact": "HIGH",
+          "confidence": "MEDIUM",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "SQL Injection"
+          ],
+          "source": "https://semgrep.dev/r/python.django.security.injection.sql.sql-injection-using-db-cursor-execute.sql-injection-db-cursor-execute",
+          "shortlink": "https://sg.run/qx7y"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "1adf92473c56",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.lang.security.audit.formatted-sql-query.formatted-sql-query",
+    "title": "Detected possible formatted SQL query. Use parameterized queries instead.",
+    "severity_raw": "WARNING",
+    "cwe": [
+      "CWE-89"
+    ],
+    "owasp": [
+      "A01:2017",
+      "A03:2021",
+      "A05:2025"
+    ],
+    "file": "target/app.py",
+    "line": 44,
+    "code_snippet": "requires login",
+    "description": "Detected possible formatted SQL query. Use parameterized queries instead.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.lang.security.audit.formatted-sql-query.formatted-sql-query",
+      "path": "target/app.py",
+      "start": {
+        "line": 44,
+        "col": 5,
+        "offset": 1400
+      },
+      "end": {
+        "line": 44,
+        "col": 69,
+        "offset": 1464
+      },
+      "extra": {
+        "message": "Detected possible formatted SQL query. Use parameterized queries instead.",
+        "metadata": {
+          "owasp": [
+            "A01:2017 - Injection",
+            "A03:2021 - Injection",
+            "A05:2025 - Injection"
+          ],
+          "cwe": [
+            "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+          ],
+          "references": [
+            "https://stackoverflow.com/questions/775296/mysql-parameterized-queries"
+          ],
+          "category": "security",
+          "technology": [
+            "python"
+          ],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": [
+            "audit"
+          ],
+          "likelihood": "LOW",
+          "impact": "HIGH",
+          "confidence": "LOW",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "SQL Injection"
+          ],
+          "source": "https://semgrep.dev/r/python.lang.security.audit.formatted-sql-query.formatted-sql-query",
+          "shortlink": "https://sg.run/EkWw"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "8035ec7e6a54",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query",
+    "title": "Avoiding SQL string concatenation: untrusted input concatenated with raw SQL query can result in SQL Injection. In order to execute raw query safely, prepared statement should be used. SQLAlchemy provides TextualSQL to easily used prepared statement with named parameters. For complex SQL composition, use SQL Expression Language or Schema Definition Language. In most cases, SQLAlchemy ORM will be a better option.",
+    "severity_raw": "ERROR",
+    "cwe": [
+      "CWE-89"
+    ],
+    "owasp": [
+      "A01:2017",
+      "A03:2021",
+      "A05:2025"
+    ],
+    "file": "target/app.py",
+    "line": 44,
+    "code_snippet": "requires login",
+    "description": "Avoiding SQL string concatenation: untrusted input concatenated with raw SQL query can result in SQL Injection. In order to execute raw query safely, prepared statement should be used. SQLAlchemy provides TextualSQL to easily used prepared statement with named parameters. For complex SQL composition, use SQL Expression Language or Schema Definition Language. In most cases, SQLAlchemy ORM will be a better option.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query",
+      "path": "target/app.py",
+      "start": {
+        "line": 44,
+        "col": 5,
+        "offset": 1400
+      },
+      "end": {
+        "line": 44,
+        "col": 69,
+        "offset": 1464
+      },
+      "extra": {
+        "message": "Avoiding SQL string concatenation: untrusted input concatenated with raw SQL query can result in SQL Injection. In order to execute raw query safely, prepared statement should be used. SQLAlchemy provides TextualSQL to easily used prepared statement with named parameters. For complex SQL composition, use SQL Expression Language or Schema Definition Language. In most cases, SQLAlchemy ORM will be a better option.",
+        "metadata": {
+          "cwe": [
+            "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+          ],
+          "owasp": [
+            "A01:2017 - Injection",
+            "A03:2021 - Injection",
+            "A05:2025 - Injection"
+          ],
+          "references": [
+            "https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-textual-sql",
+            "https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_quick_guide.htm",
+            "https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-more-specific-text-with-table-expression-literal-column-and-expression-column"
+          ],
+          "category": "security",
+          "technology": [
+            "sqlalchemy"
+          ],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": [
+            "audit"
+          ],
+          "likelihood": "LOW",
+          "impact": "HIGH",
+          "confidence": "LOW",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "SQL Injection"
+          ],
+          "source": "https://semgrep.dev/r/python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query",
+          "shortlink": "https://sg.run/2b1L"
+        },
+        "severity": "ERROR",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "9439d35a2a92",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.django.security.injection.tainted-sql-string.tainted-sql-string",
+    "title": "Detected user input used to manually construct a SQL string. This is usually bad practice because manual construction could accidentally result in a SQL injection. An attacker could use a SQL injection to steal or modify contents of the database. Instead, use a parameterized query which is available by default in most database engines. Alternatively, consider using the Django object-relational mappers (ORM) instead of raw SQL queries.",
+    "severity_raw": "ERROR",
+    "cwe": [
+      "CWE-915"
+    ],
+    "owasp": [
+      "A08:2021",
+      "A08:2025"
+    ],
+    "file": "target/app.py",
+    "line": 44,
+    "code_snippet": "requires login",
+    "description": "Detected user input used to manually construct a SQL string. This is usually bad practice because manual construction could accidentally result in a SQL injection. An attacker could use a SQL injection to steal or modify contents of the database. Instead, use a parameterized query which is available by default in most database engines. Alternatively, consider using the Django object-relational mappers (ORM) instead of raw SQL queries.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.django.security.injection.tainted-sql-string.tainted-sql-string",
+      "path": "target/app.py",
+      "start": {
+        "line": 44,
+        "col": 20,
+        "offset": 1415
+      },
+      "end": {
+        "line": 44,
+        "col": 68,
+        "offset": 1463
+      },
+      "extra": {
+        "message": "Detected user input used to manually construct a SQL string. This is usually bad practice because manual construction could accidentally result in a SQL injection. An attacker could use a SQL injection to steal or modify contents of the database. Instead, use a parameterized query which is available by default in most database engines. Alternatively, consider using the Django object-relational mappers (ORM) instead of raw SQL queries.",
+        "metadata": {
+          "cwe": [
+            "CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+          ],
+          "owasp": [
+            "A08:2021 - Software and Data Integrity Failures",
+            "A08:2025 - Software or Data Integrity Failures"
+          ],
+          "references": [
+            "https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection"
+          ],
+          "category": "security",
+          "technology": [
+            "django"
+          ],
+          "subcategory": [
+            "audit"
+          ],
+          "impact": "LOW",
+          "likelihood": "MEDIUM",
+          "confidence": "LOW",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Mass Assignment"
+          ],
+          "source": "https://semgrep.dev/r/python.django.security.injection.tainted-sql-string.tainted-sql-string",
+          "shortlink": "https://sg.run/PbZp"
+        },
+        "severity": "ERROR",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "66eef1c07274",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.flask.security.injection.tainted-sql-string.tainted-sql-string",
+    "title": "Detected user input used to manually construct a SQL string. This is usually bad practice because manual construction could accidentally result in a SQL injection. An attacker could use a SQL injection to steal or modify contents of the database. Instead, use a parameterized query which is available by default in most database engines. Alternatively, consider using an object-relational mapper (ORM) such as SQLAlchemy which will protect your queries.",
+    "severity_raw": "ERROR",
+    "cwe": [
+      "CWE-704"
+    ],
+    "owasp": [
+      "A01:2017",
+      "A03:2021",
+      "A05:2025"
+    ],
+    "file": "target/app.py",
+    "line": 44,
+    "code_snippet": "requires login",
+    "description": "Detected user input used to manually construct a SQL string. This is usually bad practice because manual construction could accidentally result in a SQL injection. An attacker could use a SQL injection to steal or modify contents of the database. Instead, use a parameterized query which is available by default in most database engines. Alternatively, consider using an object-relational mapper (ORM) such as SQLAlchemy which will protect your queries.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.flask.security.injection.tainted-sql-string.tainted-sql-string",
+      "path": "target/app.py",
+      "start": {
+        "line": 44,
+        "col": 20,
+        "offset": 1415
+      },
+      "end": {
+        "line": 44,
+        "col": 68,
+        "offset": 1463
+      },
+      "extra": {
+        "message": "Detected user input used to manually construct a SQL string. This is usually bad practice because manual construction could accidentally result in a SQL injection. An attacker could use a SQL injection to steal or modify contents of the database. Instead, use a parameterized query which is available by default in most database engines. Alternatively, consider using an object-relational mapper (ORM) such as SQLAlchemy which will protect your queries.",
+        "metadata": {
+          "cwe": [
+            "CWE-704: Incorrect Type Conversion or Cast"
+          ],
+          "owasp": [
+            "A01:2017 - Injection",
+            "A03:2021 - Injection",
+            "A05:2025 - Injection"
+          ],
+          "references": [
+            "https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-textual-sql",
+            "https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_quick_guide.htm",
+            "https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-more-specific-text-with-table-expression-literal-column-and-expression-column"
+          ],
+          "category": "security",
+          "technology": [
+            "sqlalchemy",
+            "flask"
+          ],
+          "subcategory": [
+            "vuln"
+          ],
+          "impact": "MEDIUM",
+          "likelihood": "MEDIUM",
+          "confidence": "MEDIUM",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Improper Validation"
+          ],
+          "source": "https://semgrep.dev/r/python.flask.security.injection.tainted-sql-string.tainted-sql-string",
+          "shortlink": "https://sg.run/JxZj"
+        },
+        "severity": "ERROR",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "56409bbe7896",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.django.security.injection.command.command-injection-os-system.command-injection-os-system",
+    "title": "Request data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this must be done, use the 'subprocess' module instead and pass the arguments as a list. See https://owasp.org/www-community/attacks/Command_Injection for more information.",
+    "severity_raw": "ERROR",
+    "cwe": [
+      "CWE-78"
+    ],
+    "owasp": [
+      "A01:2017",
+      "A03:2021",
+      "A05:2025"
+    ],
+    "file": "target/app.py",
+    "line": 53,
+    "code_snippet": "requires login",
+    "description": "Request data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this must be done, use the 'subprocess' module instead and pass the arguments as a list. See https://owasp.org/www-community/attacks/Command_Injection for more information.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.django.security.injection.command.command-injection-os-system.command-injection-os-system",
+      "path": "target/app.py",
+      "start": {
+        "line": 53,
+        "col": 5,
+        "offset": 1654
+      },
+      "end": {
+        "line": 57,
+        "col": 35,
+        "offset": 1904
+      },
+      "extra": {
+        "message": "Request data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this must be done, use the 'subprocess' module instead and pass the arguments as a list. See https://owasp.org/www-community/attacks/Command_Injection for more information.",
+        "metadata": {
+          "cwe": [
+            "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+          ],
+          "owasp": [
+            "A01:2017 - Injection",
+            "A03:2021 - Injection",
+            "A05:2025 - Injection"
+          ],
+          "references": [
+            "https://owasp.org/www-community/attacks/Command_Injection"
+          ],
+          "category": "security",
+          "technology": [
+            "django"
+          ],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": [
+            "vuln"
+          ],
+          "likelihood": "MEDIUM",
+          "impact": "HIGH",
+          "confidence": "MEDIUM",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Command Injection"
+          ],
+          "source": "https://semgrep.dev/r/python.django.security.injection.command.command-injection-os-system.command-injection-os-system",
+          "shortlink": "https://sg.run/Gen2"
+        },
+        "severity": "ERROR",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "4e3700d4dcf8",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.flask.security.injection.os-system-injection.os-system-injection",
+    "title": "User data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this must be done, use the 'subprocess' module instead and pass the arguments as a list.",
+    "severity_raw": "ERROR",
+    "cwe": [
+      "CWE-78"
+    ],
+    "owasp": [
+      "A01:2017",
+      "A03:2021",
+      "A05:2025"
+    ],
+    "file": "target/app.py",
+    "line": 57,
+    "code_snippet": "requires login",
+    "description": "User data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this must be done, use the 'subprocess' module instead and pass the arguments as a list.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.flask.security.injection.os-system-injection.os-system-injection",
+      "path": "target/app.py",
+      "start": {
+        "line": 57,
+        "col": 5,
+        "offset": 1874
+      },
+      "end": {
+        "line": 57,
+        "col": 35,
+        "offset": 1904
+      },
+      "extra": {
+        "message": "User data detected in os.system. This could be vulnerable to a command injection and should be avoided. If this must be done, use the 'subprocess' module instead and pass the arguments as a list.",
+        "metadata": {
+          "cwe": [
+            "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+          ],
+          "owasp": [
+            "A01:2017 - Injection",
+            "A03:2021 - Injection",
+            "A05:2025 - Injection"
+          ],
+          "references": [
+            "https://owasp.org/www-community/attacks/Command_Injection"
+          ],
+          "category": "security",
+          "technology": [
+            "flask"
+          ],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": [
+            "audit"
+          ],
+          "likelihood": "MEDIUM",
+          "impact": "HIGH",
+          "confidence": "MEDIUM",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Command Injection"
+          ],
+          "source": "https://semgrep.dev/r/python.flask.security.injection.os-system-injection.os-system-injection",
+          "shortlink": "https://sg.run/4xzz"
+        },
+        "severity": "ERROR",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "2bbc24b2f61b",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.lang.security.dangerous-system-call.dangerous-system-call",
+    "title": "Found user-controlled data used in a system call. This could allow a malicious actor to execute commands. Use the 'subprocess' module instead, which is easier to use without accidentally exposing a command injection vulnerability.",
+    "severity_raw": "ERROR",
+    "cwe": [
+      "CWE-78"
+    ],
+    "owasp": [
+      "A01:2017",
+      "A03:2021",
+      "A05:2025"
+    ],
+    "file": "target/app.py",
+    "line": 57,
+    "code_snippet": "requires login",
+    "description": "Found user-controlled data used in a system call. This could allow a malicious actor to execute commands. Use the 'subprocess' module instead, which is easier to use without accidentally exposing a command injection vulnerability.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.lang.security.dangerous-system-call.dangerous-system-call",
+      "path": "target/app.py",
+      "start": {
+        "line": 57,
+        "col": 5,
+        "offset": 1874
+      },
+      "end": {
+        "line": 57,
+        "col": 35,
+        "offset": 1904
+      },
+      "extra": {
+        "message": "Found user-controlled data used in a system call. This could allow a malicious actor to execute commands. Use the 'subprocess' module instead, which is easier to use without accidentally exposing a command injection vulnerability.",
+        "metadata": {
+          "source-rule-url": "https://bandit.readthedocs.io/en/latest/plugins/b605_start_process_with_a_shell.html",
+          "cwe": [
+            "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+          ],
+          "owasp": [
+            "A01:2017 - Injection",
+            "A03:2021 - Injection",
+            "A05:2025 - Injection"
+          ],
+          "references": [
+            "https://semgrep.dev/docs/cheat-sheets/python-command-injection/"
+          ],
+          "asvs": {
+            "control_id": "5.2.4 Dyanmic Code Execution Features",
+            "control_url": "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v52-sanitization-and-sandboxing-requirements",
+            "section": "V5: Validation, Sanitization and Encoding Verification Requirements",
+            "version": "4"
+          },
+          "category": "security",
+          "technology": [
+            "python"
+          ],
+          "confidence": "MEDIUM",
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": [
+            "vuln"
+          ],
+          "likelihood": "HIGH",
+          "impact": "HIGH",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Command Injection"
+          ],
+          "source": "https://semgrep.dev/r/python.lang.security.dangerous-system-call.dangerous-system-call",
+          "shortlink": "https://sg.run/k0W7"
+        },
+        "severity": "ERROR",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "9b5ea7277f5c",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.django.security.injection.code.user-eval.user-eval",
+    "title": "Found user data in a call to 'eval'. This is extremely dangerous because it can enable an attacker to execute arbitrary remote code on the system. Instead, refactor your code to not use 'eval' and instead use a safe library for the specific functionality you need.",
+    "severity_raw": "WARNING",
+    "cwe": [
+      "CWE-95"
+    ],
+    "owasp": [
+      "A03:2021",
+      "A05:2025"
+    ],
+    "file": "target/app.py",
+    "line": 63,
+    "code_snippet": "requires login",
+    "description": "Found user data in a call to 'eval'. This is extremely dangerous because it can enable an attacker to execute arbitrary remote code on the system. Instead, refactor your code to not use 'eval' and instead use a safe library for the specific functionality you need.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.django.security.injection.code.user-eval.user-eval",
+      "path": "target/app.py",
+      "start": {
+        "line": 63,
+        "col": 14,
+        "offset": 1980
+      },
+      "end": {
+        "line": 63,
+        "col": 44,
+        "offset": 2010
+      },
+      "extra": {
+        "message": "Found user data in a call to 'eval'. This is extremely dangerous because it can enable an attacker to execute arbitrary remote code on the system. Instead, refactor your code to not use 'eval' and instead use a safe library for the specific functionality you need.",
+        "metadata": {
+          "cwe": [
+            "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+          ],
+          "owasp": [
+            "A03:2021 - Injection",
+            "A05:2025 - Injection"
+          ],
+          "references": [
+            "https://nedbatchelder.com/blog/201206/eval_really_is_dangerous.html",
+            "https://owasp.org/www-community/attacks/Code_Injection"
+          ],
+          "category": "security",
+          "technology": [
+            "django"
+          ],
+          "subcategory": [
+            "vuln"
+          ],
+          "likelihood": "MEDIUM",
+          "impact": "HIGH",
+          "confidence": "MEDIUM",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Code Injection"
+          ],
+          "source": "https://semgrep.dev/r/python.django.security.injection.code.user-eval.user-eval",
+          "shortlink": "https://sg.run/PJDW"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "34f181b41d62",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.flask.security.injection.user-eval.eval-injection",
+    "title": "Detected user data flowing into eval. This is code injection and should be avoided.",
+    "severity_raw": "ERROR",
+    "cwe": [
+      "CWE-95"
+    ],
+    "owasp": [
+      "A03:2021",
+      "A05:2025"
+    ],
+    "file": "target/app.py",
+    "line": 63,
+    "code_snippet": "requires login",
+    "description": "Detected user data flowing into eval. This is code injection and should be avoided.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.flask.security.injection.user-eval.eval-injection",
+      "path": "target/app.py",
+      "start": {
+        "line": 63,
+        "col": 14,
+        "offset": 1980
+      },
+      "end": {
+        "line": 63,
+        "col": 44,
+        "offset": 2010
+      },
+      "extra": {
+        "message": "Detected user data flowing into eval. This is code injection and should be avoided.",
+        "metadata": {
+          "cwe": [
+            "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+          ],
+          "owasp": [
+            "A03:2021 - Injection",
+            "A05:2025 - Injection"
+          ],
+          "references": [
+            "https://nedbatchelder.com/blog/201206/eval_really_is_dangerous.html"
+          ],
+          "category": "security",
+          "technology": [
+            "flask"
+          ],
+          "subcategory": [
+            "vuln"
+          ],
+          "likelihood": "MEDIUM",
+          "impact": "MEDIUM",
+          "confidence": "MEDIUM",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Code Injection"
+          ],
+          "source": "https://semgrep.dev/r/python.flask.security.injection.user-eval.eval-injection",
+          "shortlink": "https://sg.run/5QpX"
+        },
+        "severity": "ERROR",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "714fc12f9283",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.lang.security.audit.eval-detected.eval-detected",
+    "title": "Detected the use of eval(). eval() can be dangerous if used to evaluate dynamic content. If this content can be input from outside the program, this may be a code injection vulnerability. Ensure evaluated content is not definable by external sources.",
+    "severity_raw": "WARNING",
+    "cwe": [
+      "CWE-95"
+    ],
+    "owasp": [
+      "A03:2021",
+      "A05:2025"
+    ],
+    "file": "target/app.py",
+    "line": 63,
+    "code_snippet": "requires login",
+    "description": "Detected the use of eval(). eval() can be dangerous if used to evaluate dynamic content. If this content can be input from outside the program, this may be a code injection vulnerability. Ensure evaluated content is not definable by external sources.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.lang.security.audit.eval-detected.eval-detected",
+      "path": "target/app.py",
+      "start": {
+        "line": 63,
+        "col": 14,
+        "offset": 1980
+      },
+      "end": {
+        "line": 63,
+        "col": 44,
+        "offset": 2010
+      },
+      "extra": {
+        "message": "Detected the use of eval(). eval() can be dangerous if used to evaluate dynamic content. If this content can be input from outside the program, this may be a code injection vulnerability. Ensure evaluated content is not definable by external sources.",
+        "metadata": {
+          "source-rule-url": "https://bandit.readthedocs.io/en/latest/blacklists/blacklist_calls.html#b307-eval",
+          "cwe": [
+            "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+          ],
+          "owasp": [
+            "A03:2021 - Injection",
+            "A05:2025 - Injection"
+          ],
+          "asvs": {
+            "control_id": "5.2.4 Dyanmic Code Execution Features",
+            "control_url": "https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v52-sanitization-and-sandboxing-requirements",
+            "section": "V5: Validation, Sanitization and Encoding Verification Requirements",
+            "version": "4"
+          },
+          "category": "security",
+          "technology": [
+            "python"
+          ],
+          "references": [
+            "https://owasp.org/Top10/A03_2021-Injection"
+          ],
+          "subcategory": [
+            "audit"
+          ],
+          "likelihood": "LOW",
+          "impact": "HIGH",
+          "confidence": "LOW",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Code Injection"
+          ],
+          "source": "https://semgrep.dev/r/python.lang.security.audit.eval-detected.eval-detected",
+          "shortlink": "https://sg.run/ZvrD"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "1a45f45c1176",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.lang.security.audit.md5-used-as-password.md5-used-as-password",
+    "title": "It looks like MD5 is used as a password hash. MD5 is not considered a secure password hash because it can be cracked by an attacker in a short amount of time. Use a suitable password hashing function such as scrypt. You can use `hashlib.scrypt`.",
+    "severity_raw": "WARNING",
+    "cwe": [
+      "CWE-327"
+    ],
+    "owasp": [
+      "A03:2017",
+      "A02:2021",
+      "A04:2025"
+    ],
+    "file": "target/app.py",
+    "line": 71,
+    "code_snippet": "requires login",
+    "description": "It looks like MD5 is used as a password hash. MD5 is not considered a secure password hash because it can be cracked by an attacker in a short amount of time. Use a suitable password hashing function such as scrypt. You can use `hashlib.scrypt`.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.lang.security.audit.md5-used-as-password.md5-used-as-password",
+      "path": "target/app.py",
+      "start": {
+        "line": 71,
+        "col": 14,
+        "offset": 2276
+      },
+      "end": {
+        "line": 71,
+        "col": 56,
+        "offset": 2318
+      },
+      "extra": {
+        "message": "It looks like MD5 is used as a password hash. MD5 is not considered a secure password hash because it can be cracked by an attacker in a short amount of time. Use a suitable password hashing function such as scrypt. You can use `hashlib.scrypt`.",
+        "metadata": {
+          "cwe": [
+            "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+          ],
+          "owasp": [
+            "A03:2017 - Sensitive Data Exposure",
+            "A02:2021 - Cryptographic Failures",
+            "A04:2025 - Cryptographic Failures"
+          ],
+          "references": [
+            "https://tools.ietf.org/html/rfc6151",
+            "https://crypto.stackexchange.com/questions/44151/how-does-the-flame-malware-take-advantage-of-md5-collision",
+            "https://pycryptodome.readthedocs.io/en/latest/src/hash/sha3_256.html",
+            "https://security.stackexchange.com/questions/211/how-to-securely-hash-passwords",
+            "https://github.com/returntocorp/semgrep-rules/issues/1609",
+            "https://docs.python.org/3/library/hashlib.html#hashlib.scrypt"
+          ],
+          "category": "security",
+          "technology": [
+            "pycryptodome",
+            "hashlib",
+            "md5"
+          ],
+          "subcategory": [
+            "vuln"
+          ],
+          "likelihood": "HIGH",
+          "impact": "LOW",
+          "confidence": "MEDIUM",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Cryptographic Issues"
+          ],
+          "source": "https://semgrep.dev/r/python.lang.security.audit.md5-used-as-password.md5-used-as-password",
+          "shortlink": "https://sg.run/5DwD"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "f9f658ad5ce6",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.flask.security.insecure-deserialization.insecure-deserialization",
+    "title": "Detected the use of an insecure deserialization library in a Flask route. These libraries are prone to code execution vulnerabilities. Ensure user data does not enter this function. To fix this, try to avoid serializing whole objects. Consider instead using a serializer such as JSON.",
+    "severity_raw": "ERROR",
+    "cwe": [
+      "CWE-502"
+    ],
+    "owasp": [
+      "A08:2017",
+      "A08:2021",
+      "A08:2025"
+    ],
+    "file": "target/app.py",
+    "line": 78,
+    "code_snippet": "requires login",
+    "description": "Detected the use of an insecure deserialization library in a Flask route. These libraries are prone to code execution vulnerabilities. Ensure user data does not enter this function. To fix this, try to avoid serializing whole objects. Consider instead using a serializer such as JSON.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.flask.security.insecure-deserialization.insecure-deserialization",
+      "path": "target/app.py",
+      "start": {
+        "line": 78,
+        "col": 12,
+        "offset": 2487
+      },
+      "end": {
+        "line": 78,
+        "col": 44,
+        "offset": 2519
+      },
+      "extra": {
+        "message": "Detected the use of an insecure deserialization library in a Flask route. These libraries are prone to code execution vulnerabilities. Ensure user data does not enter this function. To fix this, try to avoid serializing whole objects. Consider instead using a serializer such as JSON.",
+        "metadata": {
+          "owasp": [
+            "A08:2017 - Insecure Deserialization",
+            "A08:2021 - Software and Data Integrity Failures",
+            "A08:2025 - Software or Data Integrity Failures"
+          ],
+          "cwe": [
+            "CWE-502: Deserialization of Untrusted Data"
+          ],
+          "references": [
+            "https://docs.python.org/3/library/pickle.html"
+          ],
+          "category": "security",
+          "technology": [
+            "flask"
+          ],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": [
+            "audit"
+          ],
+          "likelihood": "LOW",
+          "impact": "MEDIUM",
+          "confidence": "LOW",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Insecure Deserialization "
+          ],
+          "source": "https://semgrep.dev/r/python.flask.security.insecure-deserialization.insecure-deserialization",
+          "shortlink": "https://sg.run/N45z"
+        },
+        "severity": "ERROR",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "2d0e6319525e",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.lang.security.deserialization.pickle.avoid-pickle",
+    "title": "Avoid using `pickle`, which is known to lead to code execution vulnerabilities. When unpickling, the serialized data could be manipulated to run arbitrary code. Instead, consider serializing the relevant data as JSON or a similar text-based serialization format.",
+    "severity_raw": "WARNING",
+    "cwe": [
+      "CWE-502"
+    ],
+    "owasp": [
+      "A08:2017",
+      "A08:2021",
+      "A08:2025"
+    ],
+    "file": "target/app.py",
+    "line": 78,
+    "code_snippet": "requires login",
+    "description": "Avoid using `pickle`, which is known to lead to code execution vulnerabilities. When unpickling, the serialized data could be manipulated to run arbitrary code. Instead, consider serializing the relevant data as JSON or a similar text-based serialization format.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.lang.security.deserialization.pickle.avoid-pickle",
+      "path": "target/app.py",
+      "start": {
+        "line": 78,
+        "col": 12,
+        "offset": 2487
+      },
+      "end": {
+        "line": 78,
+        "col": 44,
+        "offset": 2519
+      },
+      "extra": {
+        "message": "Avoid using `pickle`, which is known to lead to code execution vulnerabilities. When unpickling, the serialized data could be manipulated to run arbitrary code. Instead, consider serializing the relevant data as JSON or a similar text-based serialization format.",
+        "metadata": {
+          "owasp": [
+            "A08:2017 - Insecure Deserialization",
+            "A08:2021 - Software and Data Integrity Failures",
+            "A08:2025 - Software or Data Integrity Failures"
+          ],
+          "cwe": [
+            "CWE-502: Deserialization of Untrusted Data"
+          ],
+          "references": [
+            "https://docs.python.org/3/library/pickle.html"
+          ],
+          "category": "security",
+          "technology": [
+            "python"
+          ],
+          "cwe2022-top25": true,
+          "cwe2021-top25": true,
+          "subcategory": [
+            "audit"
+          ],
+          "likelihood": "LOW",
+          "impact": "MEDIUM",
+          "confidence": "LOW",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Insecure Deserialization "
+          ],
+          "source": "https://semgrep.dev/r/python.lang.security.deserialization.pickle.avoid-pickle",
+          "shortlink": "https://sg.run/OPwB"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "b1ce915ef210",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.flask.security.audit.app-run-param-config.avoid_app_run_with_bad_host",
+    "title": "Running flask app with host 0.0.0.0 could expose the server publicly.",
+    "severity_raw": "WARNING",
+    "cwe": [
+      "CWE-668"
+    ],
+    "owasp": [
+      "A01:2021",
+      "A01:2025"
+    ],
+    "file": "target/app.py",
+    "line": 92,
+    "code_snippet": "requires login",
+    "description": "Running flask app with host 0.0.0.0 could expose the server publicly.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.flask.security.audit.app-run-param-config.avoid_app_run_with_bad_host",
+      "path": "target/app.py",
+      "start": {
+        "line": 92,
+        "col": 5,
+        "offset": 2895
+      },
+      "end": {
+        "line": 92,
+        "col": 40,
+        "offset": 2930
+      },
+      "extra": {
+        "message": "Running flask app with host 0.0.0.0 could expose the server publicly.",
+        "metadata": {
+          "cwe": [
+            "CWE-668: Exposure of Resource to Wrong Sphere"
+          ],
+          "owasp": [
+            "A01:2021 - Broken Access Control",
+            "A01:2025 - Broken Access Control"
+          ],
+          "category": "security",
+          "technology": [
+            "flask"
+          ],
+          "references": [
+            "https://owasp.org/Top10/A01_2021-Broken_Access_Control"
+          ],
+          "subcategory": [
+            "vuln"
+          ],
+          "likelihood": "HIGH",
+          "impact": "MEDIUM",
+          "confidence": "HIGH",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Other"
+          ],
+          "source": "https://semgrep.dev/r/python.flask.security.audit.app-run-param-config.avoid_app_run_with_bad_host",
+          "shortlink": "https://sg.run/eLby"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "201b7df35f0e",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.flask.security.audit.debug-enabled.debug-enabled",
+    "title": "Detected Flask app with debug=True. Do not deploy to production with this flag enabled as it will leak sensitive information. Instead, consider using Flask configuration variables or setting 'debug' using system environment variables.",
+    "severity_raw": "WARNING",
+    "cwe": [
+      "CWE-489"
+    ],
+    "owasp": [
+      "A06:2017"
+    ],
+    "file": "target/app.py",
+    "line": 92,
+    "code_snippet": "requires login",
+    "description": "Detected Flask app with debug=True. Do not deploy to production with this flag enabled as it will leak sensitive information. Instead, consider using Flask configuration variables or setting 'debug' using system environment variables.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "python.flask.security.audit.debug-enabled.debug-enabled",
+      "path": "target/app.py",
+      "start": {
+        "line": 92,
+        "col": 5,
+        "offset": 2895
+      },
+      "end": {
+        "line": 92,
+        "col": 40,
+        "offset": 2930
+      },
+      "extra": {
+        "message": "Detected Flask app with debug=True. Do not deploy to production with this flag enabled as it will leak sensitive information. Instead, consider using Flask configuration variables or setting 'debug' using system environment variables.",
+        "metadata": {
+          "cwe": [
+            "CWE-489: Active Debug Code"
+          ],
+          "owasp": "A06:2017 - Security Misconfiguration",
+          "references": [
+            "https://labs.detectify.com/2015/10/02/how-patreon-got-hacked-publicly-exposed-werkzeug-debugger/"
+          ],
+          "category": "security",
+          "technology": [
+            "flask"
+          ],
+          "subcategory": [
+            "vuln"
+          ],
+          "likelihood": "HIGH",
+          "impact": "MEDIUM",
+          "confidence": "HIGH",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Active Debug Code"
+          ],
+          "source": "https://semgrep.dev/r/python.flask.security.audit.debug-enabled.debug-enabled",
+          "shortlink": "https://sg.run/dKrd"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "cc590b7c3c04",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "terraform.lang.security.s3-public-read-bucket.s3-public-read-bucket",
+    "title": "S3 bucket with public read access detected.",
+    "severity_raw": "WARNING",
+    "cwe": [
+      "CWE-200"
+    ],
+    "owasp": [
+      "A01:2021",
+      "A01:2025"
+    ],
+    "file": "target/infra/main.tf",
+    "line": 6,
+    "code_snippet": "requires login",
+    "description": "S3 bucket with public read access detected.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "terraform.lang.security.s3-public-read-bucket.s3-public-read-bucket",
+      "path": "target/infra/main.tf",
+      "start": {
+        "line": 6,
+        "col": 3,
+        "offset": 248
+      },
+      "end": {
+        "line": 6,
+        "col": 25,
+        "offset": 270
+      },
+      "extra": {
+        "message": "S3 bucket with public read access detected.",
+        "metadata": {
+          "cwe": [
+            "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+          ],
+          "references": [
+            "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#acl",
+            "https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl"
+          ],
+          "category": "security",
+          "technology": [
+            "terraform",
+            "aws"
+          ],
+          "owasp": [
+            "A01:2021 - Broken Access Control",
+            "A01:2025 - Broken Access Control"
+          ],
+          "cwe2021-top25": true,
+          "subcategory": [
+            "audit"
+          ],
+          "likelihood": "LOW",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Mishandled Sensitive Information"
+          ],
+          "source": "https://semgrep.dev/r/terraform.lang.security.s3-public-read-bucket.s3-public-read-bucket",
+          "shortlink": "https://sg.run/WgAy"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "49c87161029b",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "terraform.lang.security.s3-public-read-bucket.s3-public-read-bucket",
+    "title": "S3 bucket with public read access detected.",
+    "severity_raw": "WARNING",
+    "cwe": [
+      "CWE-200"
+    ],
+    "owasp": [
+      "A01:2021",
+      "A01:2025"
+    ],
+    "file": "target/infra/main.tf",
+    "line": 12,
+    "code_snippet": "requires login",
+    "description": "S3 bucket with public read access detected.",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "check_id": "terraform.lang.security.s3-public-read-bucket.s3-public-read-bucket",
+      "path": "target/infra/main.tf",
+      "start": {
+        "line": 12,
+        "col": 3,
+        "offset": 415
+      },
+      "end": {
+        "line": 12,
+        "col": 25,
+        "offset": 437
+      },
+      "extra": {
+        "message": "S3 bucket with public read access detected.",
+        "metadata": {
+          "cwe": [
+            "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+          ],
+          "references": [
+            "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#acl",
+            "https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl"
+          ],
+          "category": "security",
+          "technology": [
+            "terraform",
+            "aws"
+          ],
+          "owasp": [
+            "A01:2021 - Broken Access Control",
+            "A01:2025 - Broken Access Control"
+          ],
+          "cwe2021-top25": true,
+          "subcategory": [
+            "audit"
+          ],
+          "likelihood": "LOW",
+          "impact": "LOW",
+          "confidence": "LOW",
+          "license": "Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license",
+          "vulnerability_class": [
+            "Mishandled Sensitive Information"
+          ],
+          "source": "https://semgrep.dev/r/terraform.lang.security.s3-public-read-bucket.s3-public-read-bucket",
+          "shortlink": "https://sg.run/WgAy"
+        },
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  },
+  {
+    "id": "c1eb33f3c7c4",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2018-1000656",
+    "title": "python-flask: Denial of Service via crafted JSON file",
+    "severity_raw": "HIGH",
+    "cwe": [
+      "CWE-20"
+    ],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "Flask==0.12.2",
+    "description": "The Pallets Project flask version Before 0.12.3 contains a CWE-20: Improper Input Validation vulnerability in flask that can result in Large amount of memory usage possibly leading to denial of service. This attack appear to be exploitable via Attacker provides JSON data in incorrect encoding. This vulnerability appears to have been fixed in 0.12.3. NOTE: this may overlap CVE-2019-1010083.",
+    "package": "Flask",
+    "installed_version": "0.12.2",
+    "fixed_version": "0.12.3",
+    "raw": {
+      "VulnerabilityID": "CVE-2018-1000656",
+      "VendorIDs": [
+        "GHSA-562c-5r94-xh97"
+      ],
+      "PkgName": "Flask",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/flask@0.12.2",
+        "UID": "3ec4257bdf04b3fb"
+      },
+      "InstalledVersion": "0.12.2",
+      "FixedVersion": "0.12.3",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2018-1000656",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:23585375f136be6911b568e6b4b393e3c96d86345f42e1f116714e3221360058",
+      "Title": "python-flask: Denial of Service via crafted JSON file",
+      "Description": "The Pallets Project flask version Before 0.12.3 contains a CWE-20: Improper Input Validation vulnerability in flask that can result in Large amount of memory usage possibly leading to denial of service. This attack appear to be exploitable via Attacker provides JSON data in incorrect encoding. This vulnerability appears to have been fixed in 0.12.3. NOTE: this may overlap CVE-2019-1010083.",
+      "Severity": "HIGH",
+      "CweIDs": [
+        "CWE-20"
+      ],
+      "VendorSeverity": {
+        "ghsa": 3,
+        "nvd": 3,
+        "redhat": 1,
+        "ubuntu": 1
+      },
+      "CVSS": {
+        "ghsa": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+          "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+          "V3Score": 7.5,
+          "V40Score": 8.7
+        },
+        "nvd": {
+          "V2Vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P",
+          "V3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+          "V2Score": 5,
+          "V3Score": 7.5
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+          "V3Score": 7.5
+        }
+      },
+      "References": [
+        "https://access.redhat.com/security/cve/CVE-2018-1000656",
+        "https://github.com/advisories/GHSA-562c-5r94-xh97",
+        "https://github.com/pallets/flask",
+        "https://github.com/pallets/flask/commit/b178e89e4456e777b1a7ac6d7199052d0dfdbbbe",
+        "https://github.com/pallets/flask/pull/2691",
+        "https://github.com/pallets/flask/releases/tag/0.12.3",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/flask/PYSEC-2018-66.yaml",
+        "https://lists.debian.org/debian-lts-announce/2019/08/msg00025.html",
+        "https://nvd.nist.gov/vuln/detail/CVE-2018-1000656",
+        "https://security.netapp.com/advisory/ntap-20190221-0001",
+        "https://security.netapp.com/advisory/ntap-20190221-0001/",
+        "https://ubuntu.com/security/notices/USN-4378-1",
+        "https://usn.ubuntu.com/4378-1",
+        "https://usn.ubuntu.com/4378-1/",
+        "https://www.cve.org/CVERecord?id=CVE-2018-1000656"
+      ],
+      "PublishedDate": "2018-08-20T19:31:45.34Z",
+      "LastModifiedDate": "2026-06-17T01:33:02.153Z"
+    }
+  },
+  {
+    "id": "ae2e70c4363b",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2019-1010083",
+    "title": "python-flask: unexpected memory usage can lead to denial of service via crafted encoded JSON data",
+    "severity_raw": "HIGH",
+    "cwe": [],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "Flask==0.12.2",
+    "description": "The Pallets Project Flask before 1.0 is affected by: unexpected memory usage. The impact is: denial of service. The attack vector is: crafted encoded JSON data. The fixed version is: 1. NOTE: this may overlap CVE-2018-1000656.",
+    "package": "Flask",
+    "installed_version": "0.12.2",
+    "fixed_version": "1.0",
+    "raw": {
+      "VulnerabilityID": "CVE-2019-1010083",
+      "VendorIDs": [
+        "GHSA-5wv5-4vpf-pj6m"
+      ],
+      "PkgName": "Flask",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/flask@0.12.2",
+        "UID": "3ec4257bdf04b3fb"
+      },
+      "InstalledVersion": "0.12.2",
+      "FixedVersion": "1.0",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2019-1010083",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:5d6b3b32a28e90c16adae36fc029941c1d953212fbcd9119c83fbe2a81fbd0f1",
+      "Title": "python-flask: unexpected memory usage can lead to denial of service via crafted encoded JSON data",
+      "Description": "The Pallets Project Flask before 1.0 is affected by: unexpected memory usage. The impact is: denial of service. The attack vector is: crafted encoded JSON data. The fixed version is: 1. NOTE: this may overlap CVE-2018-1000656.",
+      "Severity": "HIGH",
+      "VendorSeverity": {
+        "ghsa": 3,
+        "nvd": 3,
+        "redhat": 2,
+        "ubuntu": 1
+      },
+      "CVSS": {
+        "ghsa": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+          "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+          "V3Score": 7.5,
+          "V40Score": 8.7
+        },
+        "nvd": {
+          "V2Vector": "AV:N/AC:L/Au:N/C:N/I:N/A:P",
+          "V3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+          "V2Score": 5,
+          "V3Score": 7.5
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+          "V3Score": 7.5
+        }
+      },
+      "References": [
+        "https://access.redhat.com/security/cve/CVE-2019-1010083",
+        "https://github.com/advisories/GHSA-5wv5-4vpf-pj6m",
+        "https://github.com/pallets/flask",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/flask/PYSEC-2019-179.yaml",
+        "https://nvd.nist.gov/vuln/detail/CVE-2019-1010083",
+        "https://palletsprojects.com/blog/flask-1-0-released/",
+        "https://snyk.io/vuln/SNYK-PYTHON-FLASK-451637",
+        "https://www.cve.org/CVERecord?id=CVE-2019-1010083",
+        "https://www.palletsprojects.com/blog/flask-1-0-released",
+        "https://www.palletsprojects.com/blog/flask-1-0-released/"
+      ],
+      "PublishedDate": "2019-07-17T14:15:11.57Z",
+      "LastModifiedDate": "2026-06-17T02:09:46.147Z"
+    }
+  },
+  {
+    "id": "c520d8ae1aa5",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2023-30861",
+    "title": "flask: Possible disclosure of permanent session cookie due to missing Vary: Cookie header",
+    "severity_raw": "HIGH",
+    "cwe": [
+      "CWE-539"
+    ],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "Flask==0.12.2",
+    "description": "Flask is a lightweight WSGI web application framework. When all of the following conditions are met, a response containing data intended for one client may be cached and subsequently sent by the proxy to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. The severity depends on the application's use of the session and the proxy's behavior regarding cookies. The risk depends on all these conditions being met.\n\n1. The application must be hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\n2. The application sets `session.permanent = True`\n3. The application does not access or modify the session at any point during a request.\n4. `SESSION_REFRESH_EACH_REQUEST` enabled (the default).\n5. The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\n\nThis happens because vulnerable versions of Flask only set the `Vary: Cookie` header when the session is accessed or modified, not when it is refreshed (re-sent to update the expiration) without being accessed or modified. This issue has been fixed in versions 2.3.2 and 2.2.5.",
+    "package": "Flask",
+    "installed_version": "0.12.2",
+    "fixed_version": "2.3.2, 2.2.5",
+    "raw": {
+      "VulnerabilityID": "CVE-2023-30861",
+      "VendorIDs": [
+        "GHSA-m2qf-hxjv-5gpq"
+      ],
+      "PkgName": "Flask",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/flask@0.12.2",
+        "UID": "3ec4257bdf04b3fb"
+      },
+      "InstalledVersion": "0.12.2",
+      "FixedVersion": "2.3.2, 2.2.5",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2023-30861",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:2de50ceefd1d5212db2a81c3bf0f8f872ae2711556de9d54b93baf19abfd799d",
+      "Title": "flask: Possible disclosure of permanent session cookie due to missing Vary: Cookie header",
+      "Description": "Flask is a lightweight WSGI web application framework. When all of the following conditions are met, a response containing data intended for one client may be cached and subsequently sent by the proxy to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. The severity depends on the application's use of the session and the proxy's behavior regarding cookies. The risk depends on all these conditions being met.\n\n1. The application must be hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\n2. The application sets `session.permanent = True`\n3. The application does not access or modify the session at any point during a request.\n4. `SESSION_REFRESH_EACH_REQUEST` enabled (the default).\n5. The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\n\nThis happens because vulnerable versions of Flask only set the `Vary: Cookie` header when the session is accessed or modified, not when it is refreshed (re-sent to update the expiration) without being accessed or modified. This issue has been fixed in versions 2.3.2 and 2.2.5.",
+      "Severity": "HIGH",
+      "CweIDs": [
+        "CWE-539"
+      ],
+      "VendorSeverity": {
+        "amazon": 3,
+        "ghsa": 3,
+        "nvd": 3,
+        "oracle-oval": 3,
+        "redhat": 3,
+        "ubuntu": 2
+      },
+      "CVSS": {
+        "ghsa": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+          "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "V3Score": 7.5,
+          "V40Score": 8.7
+        },
+        "nvd": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+          "V3Score": 7.5
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+          "V3Score": 7.5
+        }
+      },
+      "References": [
+        "https://access.redhat.com/security/cve/CVE-2023-30861",
+        "https://github.com/pallets/flask",
+        "https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b",
+        "https://github.com/pallets/flask/commit/8646edca6f47e2cd57464081b3911218d4734f8d%20%282.2.5%29",
+        "https://github.com/pallets/flask/commit/8705dd39c4fa563ea0fe0bf84c85da8fcc98b88d%20%282.3.2%29",
+        "https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965",
+        "https://github.com/pallets/flask/releases/tag/2.2.5",
+        "https://github.com/pallets/flask/releases/tag/2.3.2",
+        "https://github.com/pallets/flask/security/advisories/GHSA-m2qf-hxjv-5gpq",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/flask/PYSEC-2023-62.yaml",
+        "https://linux.oracle.com/cve/CVE-2023-30861.html",
+        "https://linux.oracle.com/errata/ELSA-2023-12710.html",
+        "https://lists.debian.org/debian-lts-announce/2023/08/msg00024.html",
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-30861",
+        "https://security.netapp.com/advisory/ntap-20230818-0006",
+        "https://security.netapp.com/advisory/ntap-20230818-0006/",
+        "https://ubuntu.com/security/notices/USN-6111-1",
+        "https://www.cve.org/CVERecord?id=CVE-2023-30861",
+        "https://www.debian.org/security/2023/dsa-5442"
+      ],
+      "PublishedDate": "2023-05-02T18:15:52.373Z",
+      "LastModifiedDate": "2026-06-17T05:55:47.853Z"
+    }
+  },
+  {
+    "id": "e05b8098f710",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2026-27205",
+    "title": "flask: Flask: Information disclosure via improper caching of session data",
+    "severity_raw": "LOW",
+    "cwe": [
+      "CWE-524"
+    ],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "Flask==0.12.2",
+    "description": "Flask is a web server gateway interface (WSGI) web application framework. In versions 3.1.2 and below, when the session object is accessed, Flask should set the Vary: Cookie header., resulting in a Use of Cache Containing Sensitive Information vulnerability. The logic instructs caches not to cache the response, as it may contain information specific to a logged in user. This is handled in most cases, but some forms of access such as the Python in operator were overlooked. The severity and risk depend on the application being hosted behind a caching proxy that doesn't ignore responses with cookies, not setting a Cache-Control header to mark pages as private or non-cacheable, and accessing the session in a way that only touches keys without reading values or mutating the session. The issue has been fixed in version 3.1.3.",
+    "package": "Flask",
+    "installed_version": "0.12.2",
+    "fixed_version": "3.1.3",
+    "raw": {
+      "VulnerabilityID": "CVE-2026-27205",
+      "VendorIDs": [
+        "GHSA-68rp-wp8r-4726"
+      ],
+      "PkgName": "Flask",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/flask@0.12.2",
+        "UID": "3ec4257bdf04b3fb"
+      },
+      "InstalledVersion": "0.12.2",
+      "FixedVersion": "3.1.3",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-27205",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:f274ff1e302131bc77cbe0f2e3049f060b30b9dc4aee6eb0e681274cc23e1575",
+      "Title": "flask: Flask: Information disclosure via improper caching of session data",
+      "Description": "Flask is a web server gateway interface (WSGI) web application framework. In versions 3.1.2 and below, when the session object is accessed, Flask should set the Vary: Cookie header., resulting in a Use of Cache Containing Sensitive Information vulnerability. The logic instructs caches not to cache the response, as it may contain information specific to a logged in user. This is handled in most cases, but some forms of access such as the Python in operator were overlooked. The severity and risk depend on the application being hosted behind a caching proxy that doesn't ignore responses with cookies, not setting a Cache-Control header to mark pages as private or non-cacheable, and accessing the session in a way that only touches keys without reading values or mutating the session. The issue has been fixed in version 3.1.3.",
+      "Severity": "LOW",
+      "CweIDs": [
+        "CWE-524"
+      ],
+      "VendorSeverity": {
+        "amazon": 2,
+        "ghsa": 1,
+        "nvd": 2,
+        "redhat": 2,
+        "ubuntu": 1
+      },
+      "CVSS": {
+        "ghsa": {
+          "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N",
+          "V40Score": 2.3
+        },
+        "nvd": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N",
+          "V3Score": 4.3
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N",
+          "V3Score": 4.3
+        }
+      },
+      "References": [
+        "https://access.redhat.com/security/cve/CVE-2026-27205",
+        "https://github.com/pallets/flask",
+        "https://github.com/pallets/flask/commit/089cb86dd22bff589a4eafb7ab8e42dc357623b4",
+        "https://github.com/pallets/flask/releases/tag/3.1.3",
+        "https://github.com/pallets/flask/security/advisories/GHSA-68rp-wp8r-4726",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-27205",
+        "https://ubuntu.com/security/notices/USN-8104-1",
+        "https://www.cve.org/CVERecord?id=CVE-2026-27205"
+      ],
+      "PublishedDate": "2026-02-21T06:17:00.91Z",
+      "LastModifiedDate": "2026-06-17T10:26:50.7Z"
+    }
+  },
+  {
+    "id": "b76aa66ef94a",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2019-20477",
+    "title": "PyYAML: command execution through python/object/apply constructor in FullLoader",
+    "severity_raw": "CRITICAL",
+    "cwe": [
+      "CWE-502"
+    ],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "PyYAML==5.1",
+    "description": "PyYAML 5.1 through 5.1.2 has insufficient restrictions on the load and load_all functions because of a class deserialization issue, e.g., Popen is a class in the subprocess module. NOTE: this issue exists because of an incomplete fix for CVE-2017-18342.",
+    "package": "PyYAML",
+    "installed_version": "5.1",
+    "fixed_version": "5.2",
+    "raw": {
+      "VulnerabilityID": "CVE-2019-20477",
+      "VendorIDs": [
+        "GHSA-3pqx-4fqf-j49f"
+      ],
+      "PkgName": "PyYAML",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/pyyaml@5.1",
+        "UID": "6d232469f46f26ce"
+      },
+      "InstalledVersion": "5.1",
+      "FixedVersion": "5.2",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2019-20477",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:5c86af52e2397c5b1476b841f0bc84e210dffeebb67099ab13fcf3becd651890",
+      "Title": "PyYAML: command execution through python/object/apply constructor in FullLoader",
+      "Description": "PyYAML 5.1 through 5.1.2 has insufficient restrictions on the load and load_all functions because of a class deserialization issue, e.g., Popen is a class in the subprocess module. NOTE: this issue exists because of an incomplete fix for CVE-2017-18342.",
+      "Severity": "CRITICAL",
+      "CweIDs": [
+        "CWE-502"
+      ],
+      "VendorSeverity": {
+        "alma": 2,
+        "ghsa": 4,
+        "nvd": 4,
+        "oracle-oval": 2,
+        "photon": 4,
+        "redhat": 2,
+        "rocky": 2
+      },
+      "CVSS": {
+        "ghsa": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+          "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+          "V3Score": 9.8,
+          "V40Score": 9.3
+        },
+        "nvd": {
+          "V2Vector": "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+          "V2Score": 7.5,
+          "V3Score": 9.8
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+          "V3Score": 9.8
+        }
+      },
+      "References": [
+        "https://access.redhat.com/security/cve/CVE-2019-20477",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1806005",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1807367",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1809065",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1815643",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1847416",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1854926",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1856481",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-20477",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-20907",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-14422",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-1747",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-8492",
+        "https://errata.almalinux.org/8/ALSA-2020-4641.html",
+        "https://errata.rockylinux.org/RLSA-2020:4641",
+        "https://github.com/advisories/GHSA-3pqx-4fqf-j49f",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/pyyaml/PYSEC-2020-176.yaml",
+        "https://github.com/yaml/pyyaml",
+        "https://github.com/yaml/pyyaml/blob/master/CHANGES",
+        "https://linux.oracle.com/cve/CVE-2019-20477.html",
+        "https://linux.oracle.com/errata/ELSA-2020-4641.html",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/33VBUY73AA6CTTYL3LRWHNFDULV7PFPN",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/33VBUY73AA6CTTYL3LRWHNFDULV7PFPN/",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/52N5XS73Z5S4ZN7I7R56ICCPCTKCUV4H",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/52N5XS73Z5S4ZN7I7R56ICCPCTKCUV4H/",
+        "https://nvd.nist.gov/vuln/detail/CVE-2019-20477",
+        "https://www.cve.org/CVERecord?id=CVE-2019-20477",
+        "https://www.exploit-db.com/download/47655"
+      ],
+      "PublishedDate": "2020-02-19T04:15:10.803Z",
+      "LastModifiedDate": "2026-06-17T02:30:32.58Z"
+    }
+  },
+  {
+    "id": "ef5bc6eb1b86",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2020-14343",
+    "title": "PyYAML: incomplete fix for CVE-2020-1747",
+    "severity_raw": "CRITICAL",
+    "cwe": [
+      "CWE-20"
+    ],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "PyYAML==5.1",
+    "description": "A vulnerability was discovered in the PyYAML library in versions before 5.4, where it is susceptible to arbitrary code execution when it processes untrusted YAML files through the full_load method or with the FullLoader loader. Applications that use the library to process untrusted input may be vulnerable to this flaw. This flaw allows an attacker to execute arbitrary code on the system by abusing the python/object/new constructor. This flaw is due to an incomplete fix for CVE-2020-1747.",
+    "package": "PyYAML",
+    "installed_version": "5.1",
+    "fixed_version": "5.4",
+    "raw": {
+      "VulnerabilityID": "CVE-2020-14343",
+      "VendorIDs": [
+        "GHSA-8q59-q68h-6hv4"
+      ],
+      "PkgName": "PyYAML",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/pyyaml@5.1",
+        "UID": "6d232469f46f26ce"
+      },
+      "InstalledVersion": "5.1",
+      "FixedVersion": "5.4",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2020-14343",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:755471f94d457ae636b282ae01c6c890ee79575fc0087c6770186d51c56ef96d",
+      "Title": "PyYAML: incomplete fix for CVE-2020-1747",
+      "Description": "A vulnerability was discovered in the PyYAML library in versions before 5.4, where it is susceptible to arbitrary code execution when it processes untrusted YAML files through the full_load method or with the FullLoader loader. Applications that use the library to process untrusted input may be vulnerable to this flaw. This flaw allows an attacker to execute arbitrary code on the system by abusing the python/object/new constructor. This flaw is due to an incomplete fix for CVE-2020-1747.",
+      "Severity": "CRITICAL",
+      "CweIDs": [
+        "CWE-20"
+      ],
+      "VendorSeverity": {
+        "alma": 2,
+        "cbl-mariner": 4,
+        "ghsa": 4,
+        "nvd": 4,
+        "oracle-oval": 2,
+        "photon": 4,
+        "redhat": 2,
+        "rocky": 2,
+        "ubuntu": 2
+      },
+      "CVSS": {
+        "ghsa": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+          "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+          "V3Score": 9.8,
+          "V40Score": 9.3
+        },
+        "nvd": {
+          "V2Vector": "AV:N/AC:L/Au:N/C:C/I:C/A:C",
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+          "V2Score": 10,
+          "V3Score": 9.8
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+          "V3Score": 9.8
+        }
+      },
+      "References": [
+        "https://access.redhat.com/security/cve/CVE-2020-14343",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1860466",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-14343",
+        "https://errata.almalinux.org/8/ALSA-2021-2583.html",
+        "https://errata.rockylinux.org/RLSA-2021:2583",
+        "https://github.com/SeldonIO/seldon-core/issues/2252",
+        "https://github.com/advisories/GHSA-8q59-q68h-6hv4",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/pyyaml/PYSEC-2021-142.yaml",
+        "https://github.com/yaml/pyyaml",
+        "https://github.com/yaml/pyyaml/commit/a001f2782501ad2d24986959f0239a354675f9dc",
+        "https://github.com/yaml/pyyaml/issues/420",
+        "https://github.com/yaml/pyyaml/issues/420#issuecomment-663673966",
+        "https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load%28input%29-Deprecation",
+        "https://linux.oracle.com/cve/CVE-2020-14343.html",
+        "https://linux.oracle.com/errata/ELSA-2021-2583.html",
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-14343",
+        "https://pypi.org/project/PyYAML",
+        "https://ubuntu.com/security/notices/USN-4940-1",
+        "https://www.cve.org/CVERecord?id=CVE-2020-14343",
+        "https://www.oracle.com/security-alerts/cpuapr2022.html",
+        "https://www.oracle.com/security-alerts/cpujul2022.html"
+      ],
+      "PublishedDate": "2021-02-09T21:15:12.707Z",
+      "LastModifiedDate": "2026-06-17T02:54:34.453Z"
+    }
+  },
+  {
+    "id": "2892cdcc6623",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2020-1747",
+    "title": "PyYAML: arbitrary command execution through python/object/new when FullLoader is used",
+    "severity_raw": "CRITICAL",
+    "cwe": [
+      "CWE-20"
+    ],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "PyYAML==5.1",
+    "description": "A vulnerability was discovered in the PyYAML library in versions before 5.3.1, where it is susceptible to arbitrary code execution when it processes untrusted YAML files through the full_load method or with the FullLoader loader. Applications that use the library to process untrusted input may be vulnerable to this flaw. An attacker could use this flaw to execute arbitrary code on the system by abusing the python/object/new constructor.",
+    "package": "PyYAML",
+    "installed_version": "5.1",
+    "fixed_version": "5.3.1",
+    "raw": {
+      "VulnerabilityID": "CVE-2020-1747",
+      "VendorIDs": [
+        "GHSA-6757-jp84-gxfx"
+      ],
+      "PkgName": "PyYAML",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/pyyaml@5.1",
+        "UID": "6d232469f46f26ce"
+      },
+      "InstalledVersion": "5.1",
+      "FixedVersion": "5.3.1",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2020-1747",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:a7e0b43278fa3b09e382bd4f526dd35e87e675788bdbb5327b21e11899e45103",
+      "Title": "PyYAML: arbitrary command execution through python/object/new when FullLoader is used",
+      "Description": "A vulnerability was discovered in the PyYAML library in versions before 5.3.1, where it is susceptible to arbitrary code execution when it processes untrusted YAML files through the full_load method or with the FullLoader loader. Applications that use the library to process untrusted input may be vulnerable to this flaw. An attacker could use this flaw to execute arbitrary code on the system by abusing the python/object/new constructor.",
+      "Severity": "CRITICAL",
+      "CweIDs": [
+        "CWE-20"
+      ],
+      "VendorSeverity": {
+        "alma": 2,
+        "cbl-mariner": 4,
+        "ghsa": 4,
+        "nvd": 4,
+        "oracle-oval": 2,
+        "photon": 4,
+        "redhat": 2,
+        "rocky": 2
+      },
+      "CVSS": {
+        "ghsa": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+          "V40Vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+          "V3Score": 9.8,
+          "V40Score": 9.3
+        },
+        "nvd": {
+          "V2Vector": "AV:N/AC:L/Au:N/C:C/I:C/A:C",
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+          "V2Score": 10,
+          "V3Score": 9.8
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+          "V3Score": 9.8
+        }
+      },
+      "References": [
+        "http://lists.opensuse.org/opensuse-security-announce/2020-04/msg00017.html",
+        "http://lists.opensuse.org/opensuse-security-announce/2020-05/msg00017.html",
+        "https://access.redhat.com/security/cve/CVE-2020-1747",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1806005",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1807367",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1809065",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1815643",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1847416",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1854926",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1856481",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2020-1747",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-20477",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-20907",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-14422",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-1747",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-8492",
+        "https://errata.almalinux.org/8/ALSA-2020-4641.html",
+        "https://errata.rockylinux.org/RLSA-2020:4641",
+        "https://github.com/advisories/GHSA-6757-jp84-gxfx",
+        "https://github.com/github/advisory-database/pull/4942",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/pyyaml/PYSEC-2020-96.yaml",
+        "https://github.com/yaml/pyyaml",
+        "https://github.com/yaml/pyyaml/commit/0cedb2a0697b2bc49e4f3841b8d4590b6b15657e",
+        "https://github.com/yaml/pyyaml/commit/5080ba513377b6355a0502104846ee804656f1e0",
+        "https://github.com/yaml/pyyaml/pull/386",
+        "https://linux.oracle.com/cve/CVE-2020-1747.html",
+        "https://linux.oracle.com/errata/ELSA-2020-4641.html",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/7PPAS6C4SZRDQLR7C22A5U3QOLXY33JX",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/7PPAS6C4SZRDQLR7C22A5U3QOLXY33JX/",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/K5HEPD7LEVDPCITY5IMDYWXUMX37VFMY",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/K5HEPD7LEVDPCITY5IMDYWXUMX37VFMY/",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/MMQXSZXNJT6ERABJZAAICI3DQSQLCP3D",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/MMQXSZXNJT6ERABJZAAICI3DQSQLCP3D/",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/WORRFHPQVAFKKXXWLSSW6XKUYLWM6CSH",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/WORRFHPQVAFKKXXWLSSW6XKUYLWM6CSH/",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/ZBJA3SGNJKCAYPSHOHWY3KBCWNM5NYK2",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/ZBJA3SGNJKCAYPSHOHWY3KBCWNM5NYK2/",
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-1747",
+        "https://www.cve.org/CVERecord?id=CVE-2020-1747",
+        "https://www.oracle.com/security-alerts/cpujul2022.html"
+      ],
+      "PublishedDate": "2020-03-24T15:15:12.293Z",
+      "LastModifiedDate": "2026-06-17T03:02:19.383Z"
+    }
+  },
+  {
+    "id": "83c14ebd6514",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2018-18074",
+    "title": "python-requests: Redirect from HTTPS to HTTP does not remove Authorization header",
+    "severity_raw": "HIGH",
+    "cwe": [
+      "CWE-522"
+    ],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "requests==2.19.1",
+    "description": "The Requests package before 2.20.0 for Python sends an HTTP Authorization header to an http URI upon receiving a same-hostname https-to-http redirect, which makes it easier for remote attackers to discover credentials by sniffing the network.",
+    "package": "requests",
+    "installed_version": "2.19.1",
+    "fixed_version": "2.20.0",
+    "raw": {
+      "VulnerabilityID": "CVE-2018-18074",
+      "VendorIDs": [
+        "GHSA-x84v-xcm2-53pg"
+      ],
+      "PkgName": "requests",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/requests@2.19.1",
+        "UID": "6b8f68713f18af0c"
+      },
+      "InstalledVersion": "2.19.1",
+      "FixedVersion": "2.20.0",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2018-18074",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:082136e24eac8569c4ee5ff2870444ca3b0af13007f247c373532c1a7aca4cfd",
+      "Title": "python-requests: Redirect from HTTPS to HTTP does not remove Authorization header",
+      "Description": "The Requests package before 2.20.0 for Python sends an HTTP Authorization header to an http URI upon receiving a same-hostname https-to-http redirect, which makes it easier for remote attackers to discover credentials by sniffing the network.",
+      "Severity": "HIGH",
+      "CweIDs": [
+        "CWE-522"
+      ],
+      "VendorSeverity": {
+        "alma": 2,
+        "amazon": 2,
+        "ghsa": 3,
+        "nvd": 3,
+        "oracle-oval": 2,
+        "photon": 3,
+        "redhat": 1,
+        "rocky": 2,
+        "ubuntu": 2
+      },
+      "CVSS": {
+        "ghsa": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+          "V3Score": 7.5
+        },
+        "nvd": {
+          "V2Vector": "AV:N/AC:L/Au:N/C:P/I:N/A:N",
+          "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+          "V2Score": 5,
+          "V3Score": 7.5
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.0/AV:A/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N",
+          "V3Score": 2.6
+        }
+      },
+      "References": [
+        "http://docs.python-requests.org/en/master/community/updates/#release-and-version-history",
+        "http://lists.opensuse.org/opensuse-security-announce/2019-07/msg00024.html",
+        "https://access.redhat.com/errata/RHSA-2019:2035",
+        "https://access.redhat.com/security/cve/CVE-2018-18074",
+        "https://bugs.debian.org/910766",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1643829",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1649153",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1659551",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1700824",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1702473",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1740347",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1749839",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=1762422",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-18074",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-20060",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-20852",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-11236",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-11324",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-16056",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-16935",
+        "https://errata.almalinux.org/8/ALSA-2020-1605.html",
+        "https://errata.rockylinux.org/RLSA-2020:1605",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/requests/PYSEC-2018-28.yaml",
+        "https://github.com/requests/requests",
+        "https://github.com/requests/requests/commit/c45d7c49ea75133e52ab22a8e9e13173938e36ff",
+        "https://github.com/requests/requests/issues/4716",
+        "https://github.com/requests/requests/pull/4718",
+        "https://linux.oracle.com/cve/CVE-2018-18074.html",
+        "https://linux.oracle.com/errata/ELSA-2020-2081.html",
+        "https://nvd.nist.gov/vuln/detail/CVE-2018-18074",
+        "https://ubuntu.com/security/notices/USN-3790-1",
+        "https://ubuntu.com/security/notices/USN-3790-2",
+        "https://usn.ubuntu.com/3790-1",
+        "https://usn.ubuntu.com/3790-1/",
+        "https://usn.ubuntu.com/3790-2",
+        "https://usn.ubuntu.com/3790-2/",
+        "https://www.cve.org/CVERecord?id=CVE-2018-18074",
+        "https://www.oracle.com/security-alerts/cpujul2022.html"
+      ],
+      "PublishedDate": "2018-10-09T17:29:01.897Z",
+      "LastModifiedDate": "2026-06-17T01:46:44.62Z"
+    }
+  },
+  {
+    "id": "673257b746c5",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2023-32681",
+    "title": "python-requests: Unintended leak of Proxy-Authorization header",
+    "severity_raw": "MEDIUM",
+    "cwe": [
+      "CWE-200"
+    ],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "requests==2.19.1",
+    "description": "Requests is a HTTP library. Since Requests 2.3.0, Requests has been leaking Proxy-Authorization headers to destination servers when redirected to an HTTPS endpoint. This is a product of how we use `rebuild_proxies` to reattach the `Proxy-Authorization` header to requests. For HTTP connections sent through the tunnel, the proxy will identify the header in the request itself and remove it prior to forwarding to the destination server. However when sent over HTTPS, the `Proxy-Authorization` header must be sent in the CONNECT request as the proxy has no visibility into the tunneled request. This results in Requests forwarding proxy credentials to the destination server unintentionally, allowing a malicious actor to potentially exfiltrate sensitive information. This issue has been patched in version 2.31.0.",
+    "package": "requests",
+    "installed_version": "2.19.1",
+    "fixed_version": "2.31.0",
+    "raw": {
+      "VulnerabilityID": "CVE-2023-32681",
+      "VendorIDs": [
+        "GHSA-j8r2-6x86-q33q"
+      ],
+      "PkgName": "requests",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/requests@2.19.1",
+        "UID": "6b8f68713f18af0c"
+      },
+      "InstalledVersion": "2.19.1",
+      "FixedVersion": "2.31.0",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2023-32681",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:abd8d777009b4f1be6ecf76f2fda7522589627cf9f6d7945015adb45a7fe0b69",
+      "Title": "python-requests: Unintended leak of Proxy-Authorization header",
+      "Description": "Requests is a HTTP library. Since Requests 2.3.0, Requests has been leaking Proxy-Authorization headers to destination servers when redirected to an HTTPS endpoint. This is a product of how we use `rebuild_proxies` to reattach the `Proxy-Authorization` header to requests. For HTTP connections sent through the tunnel, the proxy will identify the header in the request itself and remove it prior to forwarding to the destination server. However when sent over HTTPS, the `Proxy-Authorization` header must be sent in the CONNECT request as the proxy has no visibility into the tunneled request. This results in Requests forwarding proxy credentials to the destination server unintentionally, allowing a malicious actor to potentially exfiltrate sensitive information. This issue has been patched in version 2.31.0.",
+      "Severity": "MEDIUM",
+      "CweIDs": [
+        "CWE-200"
+      ],
+      "VendorSeverity": {
+        "alma": 2,
+        "amazon": 2,
+        "cbl-mariner": 2,
+        "ghsa": 2,
+        "nvd": 2,
+        "oracle-oval": 2,
+        "photon": 2,
+        "redhat": 2,
+        "rocky": 2,
+        "ubuntu": 2
+      },
+      "CVSS": {
+        "ghsa": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:N/A:N",
+          "V3Score": 6.1
+        },
+        "nvd": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:N/A:N",
+          "V3Score": 6.1
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:N/A:N",
+          "V3Score": 6.1
+        }
+      },
+      "References": [
+        "https://access.redhat.com/errata/RHSA-2023:4350",
+        "https://access.redhat.com/security/cve/CVE-2023-32681",
+        "https://bugzilla.redhat.com/2209469",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=2209469",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-32681",
+        "https://errata.almalinux.org/9/ALSA-2023-4350.html",
+        "https://errata.rockylinux.org/RLSA-2023:4520",
+        "https://github.com/psf/requests",
+        "https://github.com/psf/requests/commit/74ea7cf7a6a27a4eeb2ae24e162bcc942a6706d5",
+        "https://github.com/psf/requests/releases/tag/v2.31.0",
+        "https://github.com/psf/requests/security/advisories/GHSA-j8r2-6x86-q33q",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/requests/PYSEC-2023-74.yaml",
+        "https://linux.oracle.com/cve/CVE-2023-32681.html",
+        "https://linux.oracle.com/errata/ELSA-2023-7050.html",
+        "https://lists.debian.org/debian-lts-announce/2023/06/msg00018.html",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/AW7HNFGYP44RT3DUDQXG2QT3OEV2PJ7Y",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/AW7HNFGYP44RT3DUDQXG2QT3OEV2PJ7Y/",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/KOYASTZDGQG2BWLSNBPL3TQRL2G7QYNZ",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/KOYASTZDGQG2BWLSNBPL3TQRL2G7QYNZ/",
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-32681",
+        "https://security.gentoo.org/glsa/202309-08",
+        "https://ubuntu.com/security/notices/USN-6155-1",
+        "https://ubuntu.com/security/notices/USN-6155-2",
+        "https://ubuntu.com/security/notices/USN-7568-1",
+        "https://ubuntu.com/security/notices/USN-7762-1",
+        "https://www.cve.org/CVERecord?id=CVE-2023-32681"
+      ],
+      "PublishedDate": "2023-05-26T18:15:14.147Z",
+      "LastModifiedDate": "2026-06-17T05:59:22.687Z"
+    }
+  },
+  {
+    "id": "2c89f413d12b",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2024-35195",
+    "title": "requests: subsequent requests to the same host ignore cert verification",
+    "severity_raw": "MEDIUM",
+    "cwe": [
+      "CWE-670"
+    ],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "requests==2.19.1",
+    "description": "Requests is a HTTP library. Prior to 2.32.0, when making requests through a Requests `Session`, if the first request is made with `verify=False` to disable cert verification, all subsequent requests to the same host will continue to ignore cert verification regardless of changes to the value of `verify`. This behavior will continue for the lifecycle of the connection in the connection pool. This vulnerability is fixed in 2.32.0.",
+    "package": "requests",
+    "installed_version": "2.19.1",
+    "fixed_version": "2.32.0",
+    "raw": {
+      "VulnerabilityID": "CVE-2024-35195",
+      "VendorIDs": [
+        "GHSA-9wx4-h78v-vm56"
+      ],
+      "PkgName": "requests",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/requests@2.19.1",
+        "UID": "6b8f68713f18af0c"
+      },
+      "InstalledVersion": "2.19.1",
+      "FixedVersion": "2.32.0",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-35195",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:a3ee868562eab04e8aff3d928020e061461d2d79903c088ac4f159636ce8e1a7",
+      "Title": "requests: subsequent requests to the same host ignore cert verification",
+      "Description": "Requests is a HTTP library. Prior to 2.32.0, when making requests through a Requests `Session`, if the first request is made with `verify=False` to disable cert verification, all subsequent requests to the same host will continue to ignore cert verification regardless of changes to the value of `verify`. This behavior will continue for the lifecycle of the connection in the connection pool. This vulnerability is fixed in 2.32.0.",
+      "Severity": "MEDIUM",
+      "CweIDs": [
+        "CWE-670"
+      ],
+      "VendorSeverity": {
+        "alma": 2,
+        "amazon": 2,
+        "azure": 2,
+        "cbl-mariner": 2,
+        "ghsa": 2,
+        "oracle-oval": 2,
+        "photon": 2,
+        "redhat": 2,
+        "rocky": 2,
+        "ubuntu": 2
+      },
+      "CVSS": {
+        "ghsa": {
+          "V3Vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:N",
+          "V3Score": 5.6
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:N",
+          "V3Score": 5.6
+        }
+      },
+      "References": [
+        "https://access.redhat.com/errata/RHSA-2025:7049",
+        "https://access.redhat.com/security/cve/CVE-2024-35195",
+        "https://bugzilla.redhat.com/2282114",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=2282114",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-35195",
+        "https://errata.almalinux.org/9/ALSA-2025-7049.html",
+        "https://errata.rockylinux.org/RLSA-2025:7049",
+        "https://github.com/psf/requests",
+        "https://github.com/psf/requests/commit/a58d7f2ffb4d00b46dca2d70a3932a0b37e22fac",
+        "https://github.com/psf/requests/pull/6655",
+        "https://github.com/psf/requests/security/advisories/GHSA-9wx4-h78v-vm56",
+        "https://linux.oracle.com/cve/CVE-2024-35195.html",
+        "https://linux.oracle.com/errata/ELSA-2025-7049.html",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/IYLSNK5TL46Q6XPRVMHVWS63MVJQOK4Q",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/IYLSNK5TL46Q6XPRVMHVWS63MVJQOK4Q/",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/N7WP6EYDSUOCOJYHDK5NX43PYZ4SNHGZ",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/N7WP6EYDSUOCOJYHDK5NX43PYZ4SNHGZ/",
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-35195",
+        "https://ubuntu.com/security/notices/USN-8344-1",
+        "https://www.cve.org/CVERecord?id=CVE-2024-35195"
+      ],
+      "PublishedDate": "2024-05-20T21:15:09.99Z",
+      "LastModifiedDate": "2026-06-17T07:34:31.23Z"
+    }
+  },
+  {
+    "id": "8f132bdacf5f",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2024-47081",
+    "title": "requests: Requests vulnerable to .netrc credentials leak via malicious URLs",
+    "severity_raw": "MEDIUM",
+    "cwe": [
+      "CWE-522"
+    ],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "requests==2.19.1",
+    "description": "Requests is a HTTP library. Due to a URL parsing issue, Requests releases prior to 2.32.4 may leak .netrc credentials to third parties for specific maliciously-crafted URLs. Users should upgrade to version 2.32.4 to receive a fix. For older versions of Requests, use of the .netrc file can be disabled with `trust_env=False` on one's Requests Session.",
+    "package": "requests",
+    "installed_version": "2.19.1",
+    "fixed_version": "2.32.4",
+    "raw": {
+      "VulnerabilityID": "CVE-2024-47081",
+      "VendorIDs": [
+        "GHSA-9hjg-9r4m-mvj7"
+      ],
+      "PkgName": "requests",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/requests@2.19.1",
+        "UID": "6b8f68713f18af0c"
+      },
+      "InstalledVersion": "2.19.1",
+      "FixedVersion": "2.32.4",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-47081",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:96ca7a407181df0889eb341145184b016d3a111ba6d5bfbd2807fe592b24f221",
+      "Title": "requests: Requests vulnerable to .netrc credentials leak via malicious URLs",
+      "Description": "Requests is a HTTP library. Due to a URL parsing issue, Requests releases prior to 2.32.4 may leak .netrc credentials to third parties for specific maliciously-crafted URLs. Users should upgrade to version 2.32.4 to receive a fix. For older versions of Requests, use of the .netrc file can be disabled with `trust_env=False` on one's Requests Session.",
+      "Severity": "MEDIUM",
+      "CweIDs": [
+        "CWE-522"
+      ],
+      "VendorSeverity": {
+        "alma": 2,
+        "amazon": 2,
+        "azure": 2,
+        "cbl-mariner": 2,
+        "ghsa": 2,
+        "oracle-oval": 2,
+        "photon": 2,
+        "redhat": 2,
+        "rocky": 2,
+        "ubuntu": 2
+      },
+      "CVSS": {
+        "ghsa": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N",
+          "V3Score": 5.3
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N",
+          "V3Score": 5.3
+        }
+      },
+      "References": [
+        "http://seclists.org/fulldisclosure/2025/Jun/2",
+        "http://www.openwall.com/lists/oss-security/2025/06/03/11",
+        "http://www.openwall.com/lists/oss-security/2025/06/03/9",
+        "http://www.openwall.com/lists/oss-security/2025/06/04/1",
+        "http://www.openwall.com/lists/oss-security/2025/06/04/6",
+        "https://access.redhat.com/errata/RHSA-2025:12519",
+        "https://access.redhat.com/security/cve/CVE-2024-47081",
+        "https://bugzilla.redhat.com/2371272",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=2371272",
+        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-47081",
+        "https://errata.almalinux.org/9/ALSA-2025-12519.html",
+        "https://errata.rockylinux.org/RLSA-2025:13604",
+        "https://github.com/psf/requests",
+        "https://github.com/psf/requests/commit/96ba401c1296ab1dda74a2365ef36d88f7d144ef",
+        "https://github.com/psf/requests/pull/6965",
+        "https://github.com/psf/requests/security/advisories/GHSA-9hjg-9r4m-mvj7",
+        "https://linux.oracle.com/cve/CVE-2024-47081.html",
+        "https://linux.oracle.com/errata/ELSA-2025-14999.html",
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-47081",
+        "https://requests.readthedocs.io/en/latest/api/#requests.Session.trust_env",
+        "https://seclists.org/fulldisclosure/2025/Jun/2",
+        "https://ubuntu.com/security/notices/USN-7568-1",
+        "https://ubuntu.com/security/notices/USN-7762-1",
+        "https://www.cve.org/CVERecord?id=CVE-2024-47081",
+        "https://www.openwall.com/lists/oss-security/2025/06/03/9"
+      ],
+      "PublishedDate": "2025-06-09T18:15:24.983Z",
+      "LastModifiedDate": "2026-06-17T07:56:30.697Z"
+    }
+  },
+  {
+    "id": "a801a0ea6c63",
+    "tool": "trivy",
+    "type": "SCA",
+    "rule_id": "CVE-2026-25645",
+    "title": "requests: Requests: Security bypass due to predictable temporary file creation",
+    "severity_raw": "MEDIUM",
+    "cwe": [
+      "CWE-377"
+    ],
+    "owasp": [],
+    "file": "requirements.txt",
+    "line": 0,
+    "code_snippet": "requests==2.19.1",
+    "description": "Requests is a HTTP library. Prior to version 2.33.0, the `requests.utils.extract_zipped_paths()` utility function uses a predictable filename when extracting files from zip archives into the system temporary directory. If the target file already exists, it is reused without validation. A local attacker with write access to the temp directory could pre-create a malicious file that would be loaded in place of the legitimate one. Standard usage of the Requests library is not affected by this vulnerability. Only applications that call `extract_zipped_paths()` directly are impacted. Starting in version 2.33.0, the library extracts files to a non-deterministic location. If developers are unable to upgrade, they can set `TMPDIR` in their environment to a directory with restricted write access.",
+    "package": "requests",
+    "installed_version": "2.19.1",
+    "fixed_version": "2.33.0",
+    "raw": {
+      "VulnerabilityID": "CVE-2026-25645",
+      "VendorIDs": [
+        "GHSA-gc5v-m9x4-r6x2"
+      ],
+      "PkgName": "requests",
+      "PkgIdentifier": {
+        "PURL": "pkg:pypi/requests@2.19.1",
+        "UID": "6b8f68713f18af0c"
+      },
+      "InstalledVersion": "2.19.1",
+      "FixedVersion": "2.33.0",
+      "Status": "fixed",
+      "SeveritySource": "ghsa",
+      "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-25645",
+      "DataSource": {
+        "ID": "ghsa",
+        "Name": "GitHub Security Advisory pip",
+        "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+      },
+      "Fingerprint": "sha256:f9e4a954a3c3570e5175dc04c7898930449bd97d035332c05555903ee9fd6e2c",
+      "Title": "requests: Requests: Security bypass due to predictable temporary file creation",
+      "Description": "Requests is a HTTP library. Prior to version 2.33.0, the `requests.utils.extract_zipped_paths()` utility function uses a predictable filename when extracting files from zip archives into the system temporary directory. If the target file already exists, it is reused without validation. A local attacker with write access to the temp directory could pre-create a malicious file that would be loaded in place of the legitimate one. Standard usage of the Requests library is not affected by this vulnerability. Only applications that call `extract_zipped_paths()` directly are impacted. Starting in version 2.33.0, the library extracts files to a non-deterministic location. If developers are unable to upgrade, they can set `TMPDIR` in their environment to a directory with restricted write access.",
+      "Severity": "MEDIUM",
+      "CweIDs": [
+        "CWE-377"
+      ],
+      "VendorSeverity": {
+        "azure": 2,
+        "ghsa": 2,
+        "nvd": 2,
+        "photon": 2,
+        "redhat": 2
+      },
+      "CVSS": {
+        "ghsa": {
+          "V3Vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:H/A:N",
+          "V3Score": 4.4
+        },
+        "nvd": {
+          "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
+          "V3Score": 5.5
+        },
+        "redhat": {
+          "V3Vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:H/A:N",
+          "V3Score": 4.7
+        }
+      },
+      "References": [
+        "https://access.redhat.com/security/cve/CVE-2026-25645",
+        "https://github.com/psf/requests",
+        "https://github.com/psf/requests/commit/66d21cb07bd6255b1280291c4fafb71803cdb3b7",
+        "https://github.com/psf/requests/releases/tag/v2.33.0",
+        "https://github.com/psf/requests/security/advisories/GHSA-gc5v-m9x4-r6x2",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-25645",
+        "https://www.cve.org/CVERecord?id=CVE-2026-25645"
+      ],
+      "PublishedDate": "2026-03-25T17:16:52.97Z",
+      "LastModifiedDate": "2026-06-17T10:25:00.443Z"
+    }
+  },
+  {
+    "id": "7e6bbb3d21a4",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0086",
+    "title": "S3 Access block should block public ACL",
+    "severity_raw": "HIGH",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 4,
+    "code_snippet": "resource \"aws_s3_bucket\" \"data\" {\nbucket = \"autotriage-sample-data-bucket\"\nacl    = \"public-read\"\n}",
+    "description": "S3 buckets should block public ACLs on buckets and any objects they contain. By blocking, PUTs with fail if the object has any public ACL a.\n",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0086",
+      "Title": "S3 Access block should block public ACL",
+      "Description": "S3 buckets should block public ACLs on buckets and any objects they contain. By blocking, PUTs with fail if the object has any public ACL a.\n",
+      "Message": "No public access block so not blocking public acls",
+      "Namespace": "builtin.aws.s3.aws0086",
+      "Query": "data.builtin.aws.s3.aws0086.deny",
+      "Resolution": "Enable blocking any PUT calls with a public ACL specified",
+      "Severity": "HIGH",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0086",
+      "References": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html",
+        "https://avd.aquasec.com/misconfig/aws-0086"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_s3_bucket.data",
+        "Provider": "AWS",
+        "Service": "s3",
+        "StartLine": 4,
+        "EndLine": 7,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 4,
+              "Content": "resource \"aws_s3_bucket\" \"data\" {",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_s3_bucket\"\u001b[0m \u001b[38;5;37m\"data\"\u001b[0m {",
+              "FirstCause": true,
+              "LastCause": false
+            },
+            {
+              "Number": 5,
+              "Content": "  bucket = \"autotriage-sample-data-bucket\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mbucket\u001b[0m = \u001b[38;5;37m\"autotriage-sample-data-bucket\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 6,
+              "Content": "  acl    = \"public-read\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m  \u001b[38;5;245macl\u001b[0m    = \u001b[38;5;37m\"public-read\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 7,
+              "Content": "}",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m}",
+              "FirstCause": false,
+              "LastCause": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "8fc7f509e62c",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0087",
+    "title": "S3 Access block should block public policy",
+    "severity_raw": "HIGH",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 4,
+    "code_snippet": "resource \"aws_s3_bucket\" \"data\" {\nbucket = \"autotriage-sample-data-bucket\"\nacl    = \"public-read\"\n}",
+    "description": "S3 bucket policy should have block public policy to prevent users from putting a policy that enable public access.\n",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0087",
+      "Title": "S3 Access block should block public policy",
+      "Description": "S3 bucket policy should have block public policy to prevent users from putting a policy that enable public access.\n",
+      "Message": "No public access block so not blocking public policies",
+      "Namespace": "builtin.aws.s3.aws0087",
+      "Query": "data.builtin.aws.s3.aws0087.deny",
+      "Resolution": "Prevent policies that allow public access being PUT",
+      "Severity": "HIGH",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0087",
+      "References": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/dev-retired/access-control-block-public-access.html",
+        "https://avd.aquasec.com/misconfig/aws-0087"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_s3_bucket.data",
+        "Provider": "AWS",
+        "Service": "s3",
+        "StartLine": 4,
+        "EndLine": 7,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 4,
+              "Content": "resource \"aws_s3_bucket\" \"data\" {",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_s3_bucket\"\u001b[0m \u001b[38;5;37m\"data\"\u001b[0m {",
+              "FirstCause": true,
+              "LastCause": false
+            },
+            {
+              "Number": 5,
+              "Content": "  bucket = \"autotriage-sample-data-bucket\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mbucket\u001b[0m = \u001b[38;5;37m\"autotriage-sample-data-bucket\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 6,
+              "Content": "  acl    = \"public-read\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m  \u001b[38;5;245macl\u001b[0m    = \u001b[38;5;37m\"public-read\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 7,
+              "Content": "}",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m}",
+              "FirstCause": false,
+              "LastCause": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "de75b9ffbb0f",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0089",
+    "title": "S3 Bucket Logging",
+    "severity_raw": "LOW",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 4,
+    "code_snippet": "resource \"aws_s3_bucket\" \"data\" {\nbucket = \"autotriage-sample-data-bucket\"\nacl    = \"public-read\"\n}",
+    "description": "Ensures S3 bucket logging is enabled for S3 buckets",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0089",
+      "Title": "S3 Bucket Logging",
+      "Description": "Ensures S3 bucket logging is enabled for S3 buckets",
+      "Message": "Bucket has logging disabled",
+      "Namespace": "builtin.aws.s3.aws0089",
+      "Query": "data.builtin.aws.s3.aws0089.deny",
+      "Resolution": "Add a logging block to the resource to enable access logging",
+      "Severity": "LOW",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0089",
+      "References": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html",
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html",
+        "https://avd.aquasec.com/misconfig/aws-0089"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_s3_bucket.data",
+        "Provider": "AWS",
+        "Service": "s3",
+        "StartLine": 4,
+        "EndLine": 7,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 4,
+              "Content": "resource \"aws_s3_bucket\" \"data\" {",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_s3_bucket\"\u001b[0m \u001b[38;5;37m\"data\"\u001b[0m {",
+              "FirstCause": true,
+              "LastCause": false
+            },
+            {
+              "Number": 5,
+              "Content": "  bucket = \"autotriage-sample-data-bucket\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mbucket\u001b[0m = \u001b[38;5;37m\"autotriage-sample-data-bucket\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 6,
+              "Content": "  acl    = \"public-read\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m  \u001b[38;5;245macl\u001b[0m    = \u001b[38;5;37m\"public-read\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 7,
+              "Content": "}",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m}",
+              "FirstCause": false,
+              "LastCause": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "a2dce4aa615e",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0090",
+    "title": "S3 Data should be versioned",
+    "severity_raw": "MEDIUM",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 4,
+    "code_snippet": "resource \"aws_s3_bucket\" \"data\" {\nbucket = \"autotriage-sample-data-bucket\"\nacl    = \"public-read\"\n}",
+    "description": "Versioning in Amazon S3 is a means of keeping multiple variants of an object in the same bucket.\n\nYou can use the S3 Versioning feature to preserve, retrieve, and restore every version of every object stored in your buckets.\n\nWith versioning you can recover more easily from both unintended user actions and application failures.\n\nWhen you enable versioning, also keep in mind the potential costs of storing noncurrent versions of objects. To help manage those costs, consider setting up an S3 Lifecycle configuration.\n",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0090",
+      "Title": "S3 Data should be versioned",
+      "Description": "Versioning in Amazon S3 is a means of keeping multiple variants of an object in the same bucket.\n\nYou can use the S3 Versioning feature to preserve, retrieve, and restore every version of every object stored in your buckets.\n\nWith versioning you can recover more easily from both unintended user actions and application failures.\n\nWhen you enable versioning, also keep in mind the potential costs of storing noncurrent versions of objects. To help manage those costs, consider setting up an S3 Lifecycle configuration.\n",
+      "Message": "Bucket does not have versioning enabled",
+      "Namespace": "builtin.aws.s3.aws0090",
+      "Query": "data.builtin.aws.s3.aws0090.deny",
+      "Resolution": "Enable versioning to protect against accidental/malicious removal or modification",
+      "Severity": "MEDIUM",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0090",
+      "References": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html",
+        "https://aws.amazon.com/blogs/storage/reduce-storage-costs-with-fewer-noncurrent-versions-using-amazon-s3-lifecycle/",
+        "https://avd.aquasec.com/misconfig/aws-0090"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_s3_bucket.data",
+        "Provider": "AWS",
+        "Service": "s3",
+        "StartLine": 4,
+        "EndLine": 7,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 4,
+              "Content": "resource \"aws_s3_bucket\" \"data\" {",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_s3_bucket\"\u001b[0m \u001b[38;5;37m\"data\"\u001b[0m {",
+              "FirstCause": true,
+              "LastCause": false
+            },
+            {
+              "Number": 5,
+              "Content": "  bucket = \"autotriage-sample-data-bucket\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mbucket\u001b[0m = \u001b[38;5;37m\"autotriage-sample-data-bucket\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 6,
+              "Content": "  acl    = \"public-read\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m  \u001b[38;5;245macl\u001b[0m    = \u001b[38;5;37m\"public-read\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 7,
+              "Content": "}",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m}",
+              "FirstCause": false,
+              "LastCause": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "d248797297c1",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0091",
+    "title": "S3 Access Block should Ignore Public ACL",
+    "severity_raw": "HIGH",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 4,
+    "code_snippet": "resource \"aws_s3_bucket\" \"data\" {\nbucket = \"autotriage-sample-data-bucket\"\nacl    = \"public-read\"\n}",
+    "description": "S3 buckets should ignore public ACLs on buckets and any objects they contain. By ignoring rather than blocking, PUT calls with public ACLs will still be applied but the ACL will be ignored.\n",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0091",
+      "Title": "S3 Access Block should Ignore Public ACL",
+      "Description": "S3 buckets should ignore public ACLs on buckets and any objects they contain. By ignoring rather than blocking, PUT calls with public ACLs will still be applied but the ACL will be ignored.\n",
+      "Message": "No public access block so not blocking public acls",
+      "Namespace": "builtin.aws.s3.aws0091",
+      "Query": "data.builtin.aws.s3.aws0091.deny",
+      "Resolution": "Enable ignoring the application of public ACLs in PUT calls",
+      "Severity": "HIGH",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0091",
+      "References": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html",
+        "https://avd.aquasec.com/misconfig/aws-0091"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_s3_bucket.data",
+        "Provider": "AWS",
+        "Service": "s3",
+        "StartLine": 4,
+        "EndLine": 7,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 4,
+              "Content": "resource \"aws_s3_bucket\" \"data\" {",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_s3_bucket\"\u001b[0m \u001b[38;5;37m\"data\"\u001b[0m {",
+              "FirstCause": true,
+              "LastCause": false
+            },
+            {
+              "Number": 5,
+              "Content": "  bucket = \"autotriage-sample-data-bucket\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mbucket\u001b[0m = \u001b[38;5;37m\"autotriage-sample-data-bucket\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 6,
+              "Content": "  acl    = \"public-read\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m  \u001b[38;5;245macl\u001b[0m    = \u001b[38;5;37m\"public-read\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 7,
+              "Content": "}",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m}",
+              "FirstCause": false,
+              "LastCause": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "69aaed1f4f00",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0092",
+    "title": "S3 Buckets not publicly accessible through ACL.",
+    "severity_raw": "HIGH",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 6,
+    "code_snippet": "resource \"aws_s3_bucket\" \"data\" {\nbucket = \"autotriage-sample-data-bucket\"\nacl    = \"public-read\"\n}",
+    "description": "Buckets should not have ACLs that allow public access\n",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0092",
+      "Title": "S3 Buckets not publicly accessible through ACL.",
+      "Description": "Buckets should not have ACLs that allow public access\n",
+      "Message": "Bucket has a public ACL: \"public-read\"",
+      "Namespace": "builtin.aws.s3.aws0092",
+      "Query": "data.builtin.aws.s3.aws0092.deny",
+      "Resolution": "Don't use canned ACLs or switch to private acl",
+      "Severity": "HIGH",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0092",
+      "References": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html",
+        "https://avd.aquasec.com/misconfig/aws-0092"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_s3_bucket.data",
+        "Provider": "AWS",
+        "Service": "s3",
+        "StartLine": 6,
+        "EndLine": 6,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 4,
+              "Content": "resource \"aws_s3_bucket\" \"data\" {",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_s3_bucket\"\u001b[0m \u001b[38;5;37m\"data\"\u001b[0m {",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 5,
+              "Content": "  bucket = \"autotriage-sample-data-bucket\"",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mbucket\u001b[0m = \u001b[38;5;37m\"autotriage-sample-data-bucket\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 6,
+              "Content": "  acl    = \"public-read\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m  \u001b[38;5;245macl\u001b[0m    = \u001b[38;5;37m\"public-read\"",
+              "FirstCause": true,
+              "LastCause": true
+            },
+            {
+              "Number": 7,
+              "Content": "}",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m}",
+              "FirstCause": false,
+              "LastCause": false
+            }
+          ]
+        },
+        "Occurrences": [
+          {
+            "Resource": "aws_s3_bucket.data",
+            "Filename": "infra/main.tf",
+            "Location": {
+              "StartLine": 4,
+              "EndLine": 7
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2b749deaf685",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0093",
+    "title": "S3 Access block should restrict public bucket to limit access",
+    "severity_raw": "HIGH",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 4,
+    "code_snippet": "resource \"aws_s3_bucket\" \"data\" {\nbucket = \"autotriage-sample-data-bucket\"\nacl    = \"public-read\"\n}",
+    "description": "S3 buckets should restrict public policies for the bucket. By enabling, the restrict_public_buckets, only the bucket owner and AWS Services can access if it has a public policy.\n",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0093",
+      "Title": "S3 Access block should restrict public bucket to limit access",
+      "Description": "S3 buckets should restrict public policies for the bucket. By enabling, the restrict_public_buckets, only the bucket owner and AWS Services can access if it has a public policy.\n",
+      "Message": "No public access block so not restricting public buckets",
+      "Namespace": "builtin.aws.s3.aws0093",
+      "Query": "data.builtin.aws.s3.aws0093.deny",
+      "Resolution": "Limit the access to public buckets to only the owner or AWS Services (eg; CloudFront)",
+      "Severity": "HIGH",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0093",
+      "References": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/dev-retired/access-control-block-public-access.html",
+        "https://avd.aquasec.com/misconfig/aws-0093"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_s3_bucket.data",
+        "Provider": "AWS",
+        "Service": "s3",
+        "StartLine": 4,
+        "EndLine": 7,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 4,
+              "Content": "resource \"aws_s3_bucket\" \"data\" {",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_s3_bucket\"\u001b[0m \u001b[38;5;37m\"data\"\u001b[0m {",
+              "FirstCause": true,
+              "LastCause": false
+            },
+            {
+              "Number": 5,
+              "Content": "  bucket = \"autotriage-sample-data-bucket\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mbucket\u001b[0m = \u001b[38;5;37m\"autotriage-sample-data-bucket\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 6,
+              "Content": "  acl    = \"public-read\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m  \u001b[38;5;245macl\u001b[0m    = \u001b[38;5;37m\"public-read\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 7,
+              "Content": "}",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m}",
+              "FirstCause": false,
+              "LastCause": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "ef09a1b13d76",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0094",
+    "title": "S3 buckets should each define an aws_s3_bucket_public_access_block",
+    "severity_raw": "LOW",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 4,
+    "code_snippet": "resource \"aws_s3_bucket\" \"data\" {\nbucket = \"autotriage-sample-data-bucket\"\nacl    = \"public-read\"\n}",
+    "description": "The \"block public access\" settings in S3 override individual policies that apply to a given bucket, meaning that all public access can be controlled in one central types for that bucket. It is therefore good practice to define these settings for each bucket in order to clearly define the public access that can be allowed for it.\n",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0094",
+      "Title": "S3 buckets should each define an aws_s3_bucket_public_access_block",
+      "Description": "The \"block public access\" settings in S3 override individual policies that apply to a given bucket, meaning that all public access can be controlled in one central types for that bucket. It is therefore good practice to define these settings for each bucket in order to clearly define the public access that can be allowed for it.\n",
+      "Message": "Bucket does not have a corresponding public access block.",
+      "Namespace": "builtin.aws.s3.aws0094",
+      "Query": "data.builtin.aws.s3.aws0094.deny",
+      "Resolution": "Define a aws_s3_bucket_public_access_block for the given bucket to control public access policies",
+      "Severity": "LOW",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0094",
+      "References": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html",
+        "https://avd.aquasec.com/misconfig/aws-0094"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_s3_bucket.data",
+        "Provider": "AWS",
+        "Service": "s3",
+        "StartLine": 4,
+        "EndLine": 7,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 4,
+              "Content": "resource \"aws_s3_bucket\" \"data\" {",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_s3_bucket\"\u001b[0m \u001b[38;5;37m\"data\"\u001b[0m {",
+              "FirstCause": true,
+              "LastCause": false
+            },
+            {
+              "Number": 5,
+              "Content": "  bucket = \"autotriage-sample-data-bucket\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mbucket\u001b[0m = \u001b[38;5;37m\"autotriage-sample-data-bucket\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 6,
+              "Content": "  acl    = \"public-read\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m  \u001b[38;5;245macl\u001b[0m    = \u001b[38;5;37m\"public-read\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 7,
+              "Content": "}",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m}",
+              "FirstCause": false,
+              "LastCause": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "1ca1d2c71c9e",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0099",
+    "title": "Missing description for security group.",
+    "severity_raw": "LOW",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 16,
+    "code_snippet": "resource \"aws_security_group\" \"ssh\" {\nname = \"autotriage-ssh\"\ningress {\n# Open to the entire internet:\ncidr_blocks = [\"0.0.0.0/0\"]\nfrom_port   = 22\nto_port     = 22\nprotocol    = \"tcp\"",
+    "description": "Security groups should include a description for auditing purposes.\n\nSimplifies auditing, debugging, and managing security groups.\n",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0099",
+      "Title": "Missing description for security group.",
+      "Description": "Security groups should include a description for auditing purposes.\n\nSimplifies auditing, debugging, and managing security groups.\n",
+      "Message": "Security group explicitly uses the default description.",
+      "Namespace": "builtin.aws.ec2.aws0099",
+      "Query": "data.builtin.aws.ec2.aws0099.deny",
+      "Resolution": "Add descriptions for all security groups",
+      "Severity": "LOW",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0099",
+      "References": [
+        "https://www.cloudconformity.com/knowledge-base/aws/EC2/security-group-rules-description.html",
+        "https://avd.aquasec.com/misconfig/aws-0099"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_security_group.ssh",
+        "Provider": "AWS",
+        "Service": "ec2",
+        "StartLine": 16,
+        "EndLine": 26,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 16,
+              "Content": "resource \"aws_security_group\" \"ssh\" {",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_security_group\"\u001b[0m \u001b[38;5;37m\"ssh\"\u001b[0m {",
+              "FirstCause": true,
+              "LastCause": false
+            },
+            {
+              "Number": 17,
+              "Content": "  name = \"autotriage-ssh\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mname\u001b[0m = \u001b[38;5;37m\"autotriage-ssh\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 18,
+              "Content": "",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 19,
+              "Content": "  ingress {",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  ingress {",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 20,
+              "Content": "    # Open to the entire internet:",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;239m    # Open to the entire internet:",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 21,
+              "Content": "    cidr_blocks = [\"0.0.0.0/0\"]",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m    \u001b[38;5;245mcidr_blocks\u001b[0m = [\u001b[38;5;37m\"0.0.0.0/0\"\u001b[0m]",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 22,
+              "Content": "    from_port   = 22",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "    \u001b[38;5;245mfrom_port\u001b[0m   = \u001b[38;5;37m22",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 23,
+              "Content": "    to_port     = 22",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m    \u001b[38;5;245mto_port\u001b[0m     = \u001b[38;5;37m22",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 24,
+              "Content": "    protocol    = \"tcp\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m    \u001b[38;5;245mprotocol\u001b[0m    = \u001b[38;5;37m\"tcp\"",
+              "FirstCause": false,
+              "LastCause": true
+            },
+            {
+              "Number": 25,
+              "Content": "",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": true,
+              "FirstCause": false,
+              "LastCause": false
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "66f87406fa87",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0107",
+    "title": "Security groups should not allow unrestricted ingress to SSH or RDP from any IP address.",
+    "severity_raw": "HIGH",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 21,
+    "code_snippet": "resource \"aws_security_group\" \"ssh\" {\nname = \"autotriage-ssh\"\ningress {\n# Open to the entire internet:\ncidr_blocks = [\"0.0.0.0/0\"]\nfrom_port   = 22\nto_port     = 22\nprotocol    = \"tcp\"",
+    "description": "Security groups provide stateful filtering of ingress and egress network traffic to AWS\nresources. It is recommended that no security group allows unrestricted ingress access to\nremote server administration ports, such as SSH to port 22 and RDP to port 3389.\n",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0107",
+      "Title": "Security groups should not allow unrestricted ingress to SSH or RDP from any IP address.",
+      "Description": "Security groups provide stateful filtering of ingress and egress network traffic to AWS\nresources. It is recommended that no security group allows unrestricted ingress access to\nremote server administration ports, such as SSH to port 22 and RDP to port 3389.\n",
+      "Message": "Security group rule allows unrestricted ingress from any IP address.",
+      "Namespace": "builtin.aws.ec2.aws0107",
+      "Query": "data.builtin.aws.ec2.aws0107.deny",
+      "Resolution": "Set a more restrictive CIDR range",
+      "Severity": "HIGH",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0107",
+      "References": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-rules-reference.html",
+        "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-13",
+        "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-14",
+        "https://avd.aquasec.com/misconfig/aws-0107"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_security_group.ssh",
+        "Provider": "AWS",
+        "Service": "ec2",
+        "StartLine": 21,
+        "EndLine": 21,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 16,
+              "Content": "resource \"aws_security_group\" \"ssh\" {",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_security_group\"\u001b[0m \u001b[38;5;37m\"ssh\"\u001b[0m {",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 17,
+              "Content": "  name = \"autotriage-ssh\"",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mname\u001b[0m = \u001b[38;5;37m\"autotriage-ssh\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 18,
+              "Content": "",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 19,
+              "Content": "  ingress {",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  ingress {",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 20,
+              "Content": "    # Open to the entire internet:",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;239m    # Open to the entire internet:",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 21,
+              "Content": "    cidr_blocks = [\"0.0.0.0/0\"]",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m    \u001b[38;5;245mcidr_blocks\u001b[0m = [\u001b[38;5;37m\"0.0.0.0/0\"\u001b[0m]",
+              "FirstCause": true,
+              "LastCause": true
+            },
+            {
+              "Number": 22,
+              "Content": "    from_port   = 22",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "    \u001b[38;5;245mfrom_port\u001b[0m   = \u001b[38;5;37m22",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 23,
+              "Content": "    to_port     = 22",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m    \u001b[38;5;245mto_port\u001b[0m     = \u001b[38;5;37m22",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 24,
+              "Content": "    protocol    = \"tcp\"",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m    \u001b[38;5;245mprotocol\u001b[0m    = \u001b[38;5;37m\"tcp\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 25,
+              "Content": "",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": true,
+              "FirstCause": false,
+              "LastCause": false
+            }
+          ]
+        },
+        "Occurrences": [
+          {
+            "Resource": "ingress",
+            "Filename": "infra/main.tf",
+            "Location": {
+              "StartLine": 19,
+              "EndLine": 25
+            }
+          },
+          {
+            "Resource": "aws_security_group.ssh",
+            "Filename": "infra/main.tf",
+            "Location": {
+              "StartLine": 16,
+              "EndLine": 26
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "26ce609f12fe",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0124",
+    "title": "Missing description for security group rule.",
+    "severity_raw": "LOW",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 19,
+    "code_snippet": "resource \"aws_security_group\" \"ssh\" {\nname = \"autotriage-ssh\"\ningress {\n# Open to the entire internet:\ncidr_blocks = [\"0.0.0.0/0\"]\nfrom_port   = 22\nto_port     = 22\nprotocol    = \"tcp\"",
+    "description": "Security group rules should include a description for auditing purposes.\n\nSimplifies auditing, debugging, and managing security groups.\n",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0124",
+      "Title": "Missing description for security group rule.",
+      "Description": "Security group rules should include a description for auditing purposes.\n\nSimplifies auditing, debugging, and managing security groups.\n",
+      "Message": "Security group rule does not have a description.",
+      "Namespace": "builtin.aws.ec2.aws0124",
+      "Query": "data.builtin.aws.ec2.aws0124.deny",
+      "Resolution": "Add descriptions for all security groups rules",
+      "Severity": "LOW",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0124",
+      "References": [
+        "https://www.cloudconformity.com/knowledge-base/aws/EC2/security-group-rules-description.html",
+        "https://avd.aquasec.com/misconfig/aws-0124"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_security_group.ssh",
+        "Provider": "AWS",
+        "Service": "ec2",
+        "StartLine": 19,
+        "EndLine": 25,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 16,
+              "Content": "resource \"aws_security_group\" \"ssh\" {",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_security_group\"\u001b[0m \u001b[38;5;37m\"ssh\"\u001b[0m {",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 17,
+              "Content": "  name = \"autotriage-ssh\"",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mname\u001b[0m = \u001b[38;5;37m\"autotriage-ssh\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 18,
+              "Content": "",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 19,
+              "Content": "  ingress {",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  ingress {",
+              "FirstCause": true,
+              "LastCause": false
+            },
+            {
+              "Number": 20,
+              "Content": "    # Open to the entire internet:",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;239m    # Open to the entire internet:",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 21,
+              "Content": "    cidr_blocks = [\"0.0.0.0/0\"]",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m    \u001b[38;5;245mcidr_blocks\u001b[0m = [\u001b[38;5;37m\"0.0.0.0/0\"\u001b[0m]",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 22,
+              "Content": "    from_port   = 22",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "    \u001b[38;5;245mfrom_port\u001b[0m   = \u001b[38;5;37m22",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 23,
+              "Content": "    to_port     = 22",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m    \u001b[38;5;245mto_port\u001b[0m     = \u001b[38;5;37m22",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 24,
+              "Content": "    protocol    = \"tcp\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m    \u001b[38;5;245mprotocol\u001b[0m    = \u001b[38;5;37m\"tcp\"",
+              "FirstCause": false,
+              "LastCause": true
+            },
+            {
+              "Number": 25,
+              "Content": "",
+              "IsCause": false,
+              "Annotation": "",
+              "Truncated": true,
+              "FirstCause": false,
+              "LastCause": false
+            }
+          ]
+        },
+        "Occurrences": [
+          {
+            "Resource": "aws_security_group.ssh",
+            "Filename": "infra/main.tf",
+            "Location": {
+              "StartLine": 16,
+              "EndLine": 26
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "0d1e6c23d0f2",
+    "tool": "trivy",
+    "type": "IAC",
+    "rule_id": "AWS-0132",
+    "title": "S3 encryption should use Customer Managed Keys",
+    "severity_raw": "HIGH",
+    "cwe": [],
+    "owasp": [],
+    "file": "infra/main.tf",
+    "line": 4,
+    "code_snippet": "resource \"aws_s3_bucket\" \"data\" {\nbucket = \"autotriage-sample-data-bucket\"\nacl    = \"public-read\"\n}",
+    "description": "Encryption using AWS keys provides protection for your S3 buckets. To gain greater control over encryption, such as key rotation, access policies, and auditability, use customer managed keys (CMKs) with SSE-KMS.\nNote that SSE-KMS is not supported for S3 server access logging destination buckets; in such cases, use SSE-S3 instead.\n",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "Type": "Terraform Security Check",
+      "ID": "AWS-0132",
+      "Title": "S3 encryption should use Customer Managed Keys",
+      "Description": "Encryption using AWS keys provides protection for your S3 buckets. To gain greater control over encryption, such as key rotation, access policies, and auditability, use customer managed keys (CMKs) with SSE-KMS.\nNote that SSE-KMS is not supported for S3 server access logging destination buckets; in such cases, use SSE-S3 instead.\n",
+      "Message": "Bucket does not encrypt data with a customer managed key.",
+      "Namespace": "builtin.aws.s3.aws0132",
+      "Query": "data.builtin.aws.s3.aws0132.deny",
+      "Resolution": "Use SSE-KMS with a customer managed key (CMK)",
+      "Severity": "HIGH",
+      "PrimaryURL": "https://avd.aquasec.com/misconfig/aws-0132",
+      "References": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-encryption.html",
+        "https://avd.aquasec.com/misconfig/aws-0132"
+      ],
+      "Status": "FAIL",
+      "CauseMetadata": {
+        "Resource": "aws_s3_bucket.data",
+        "Provider": "AWS",
+        "Service": "s3",
+        "StartLine": 4,
+        "EndLine": 7,
+        "Code": {
+          "Lines": [
+            {
+              "Number": 4,
+              "Content": "resource \"aws_s3_bucket\" \"data\" {",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_s3_bucket\"\u001b[0m \u001b[38;5;37m\"data\"\u001b[0m {",
+              "FirstCause": true,
+              "LastCause": false
+            },
+            {
+              "Number": 5,
+              "Content": "  bucket = \"autotriage-sample-data-bucket\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "  \u001b[38;5;245mbucket\u001b[0m = \u001b[38;5;37m\"autotriage-sample-data-bucket\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 6,
+              "Content": "  acl    = \"public-read\"",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m  \u001b[38;5;245macl\u001b[0m    = \u001b[38;5;37m\"public-read\"",
+              "FirstCause": false,
+              "LastCause": false
+            },
+            {
+              "Number": 7,
+              "Content": "}",
+              "IsCause": true,
+              "Annotation": "",
+              "Truncated": false,
+              "Highlighted": "\u001b[0m}",
+              "FirstCause": false,
+              "LastCause": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "59459df29cd9",
+    "tool": "trivy",
+    "type": "SECRET",
+    "rule_id": "aws-access-key-id",
+    "title": "AWS Access Key ID",
+    "severity_raw": "CRITICAL",
+    "cwe": [
+      "CWE-798"
+    ],
+    "owasp": [],
+    "file": "app.py",
+    "line": 18,
+    "code_snippet": "from flask import Flask, request\nAWS_ACCESS_KEY_ID = \"********************\"",
+    "description": "AWS Access Key ID",
+    "package": null,
+    "installed_version": null,
+    "fixed_version": null,
+    "raw": {
+      "RuleID": "aws-access-key-id",
+      "Category": "AWS",
+      "Severity": "CRITICAL",
+      "Title": "AWS Access Key ID",
+      "StartLine": 18,
+      "EndLine": 18,
+      "Code": {
+        "Lines": [
+          {
+            "Number": 16,
+            "Content": "",
+            "IsCause": false,
+            "Annotation": "",
+            "Truncated": false,
+            "FirstCause": false,
+            "LastCause": false
+          },
+          {
+            "Number": 17,
+            "Content": "from flask import Flask, request",
+            "IsCause": false,
+            "Annotation": "",
+            "Truncated": false,
+            "Highlighted": "from flask import Flask, request",
+            "FirstCause": false,
+            "LastCause": false
+          },
+          {
+            "Number": 18,
+            "Content": "AWS_ACCESS_KEY_ID = \"********************\"",
+            "IsCause": true,
+            "Annotation": "",
+            "Truncated": false,
+            "Highlighted": "AWS_ACCESS_KEY_ID = \"********************\"",
+            "FirstCause": true,
+            "LastCause": true
+          },
+          {
+            "Number": 19,
+            "Content": "",
+            "IsCause": false,
+            "Annotation": "",
+            "Truncated": false,
+            "FirstCause": false,
+            "LastCause": false
+          }
+        ]
+      },
+      "Match": "AWS_ACCESS_KEY_ID = \"********************\"",
+      "Offset": 685
+    }
+  }
+]
