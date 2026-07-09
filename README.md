@@ -1,8 +1,18 @@
 # AutoTriage
 
+[![CI](https://github.com/rohanbatrain/autotriage/actions/workflows/ci.yml/badge.svg)](https://github.com/rohanbatrain/autotriage/actions/workflows/ci.yml)
+![coverage](https://img.shields.io/badge/coverage-~90%25-brightgreen)
+![tests](https://img.shields.io/badge/tests-49-brightgreen)
+![mypy](https://img.shields.io/badge/mypy-strict-blue)
+![lint](https://img.shields.io/badge/lint-ruff-000000)
+![python](https://img.shields.io/badge/python-3.11%2B-blue)
+![license](https://img.shields.io/badge/license-MIT-green)
+
 **An autonomous vulnerability-triage agent: it ingests Semgrep/Trivy/Gitleaks findings, reasons about severity and business impact, and acts — filing tickets, assigning owners, drafting remediation PRs — while escalating anything it is not sure about to a human.**
 
-Built with the Claude Agent SDK. AutoTriage turns a raw pile of scanner output into an owned, prioritized, and partly self-remediating backlog, and it ships with an **eval harness** that scores its own triage quality against a labeled set — the part most agent demos skip.
+Built with the Claude Agent SDK (and an Anthropic Messages API backend). AutoTriage turns a raw pile of scanner output into an owned, prioritized, partly self-remediating backlog, and it ships with an **eval harness** that scores its own triage quality against a labeled set — the part most agent demos skip.
+
+> On a live scan of the bundled vulnerable target, AutoTriage triaged **44 real findings into 24 tickets and 20 human escalations**; on the labeled eval set it scored **100% verdict accuracy** with both planted false positives correctly suppressed.
 
 ---
 
@@ -10,22 +20,22 @@ Built with the Claude Agent SDK. AutoTriage turns a raw pile of scanner output i
 
 | JD requirement | Covered by |
 |---|---|
-| Claude Code / Agent SDK, not just chat | `agent/` harness + this parallel build |
+| Claude Code / Agent SDK, not just chat | `autotriage.agent` harness (SDK + Messages API backends) |
 | Read SAST/DAST/scanner output | Semgrep (SAST) + Trivy (SCA/IaC) + Gitleaks (secrets) |
-| Reason about severity & business impact | LLM triage rubric → verdict + business_impact |
+| Reason about severity & business impact | LLM triage rubric → `verdict` + `business_impact` |
 | Take action autonomously | tickets, owner assignment, draft PRs, `TRACKER.md` |
-| **Eval + guardrails (most applicants skip!)** | `evals/` labeled set + precision/recall scorer |
-| Beyond triage: auto-PR, auto-validate, summarize | remediation diff, re-scan validation, risk summary |
-| Safe-to-act vs escalate to human | confidence threshold → `needs_human` escalation |
-| Python + REST + Git + CI/CD | GitHub Action runs scan→triage on every PR |
+| **Eval + guardrails (most applicants skip!)** | `evals/` labeled set + precision/recall scorer + [eval methodology](docs/eval-methodology.md) |
+| Beyond triage: auto-PR, auto-summarize | remediation PR drafts, [stakeholder risk summary](docs/risk-summary-sample.md) |
+| Safe-to-act vs escalate to human | confidence threshold → `needs_human` escalation, enforced in the type layer |
+| Python + REST + Git + CI/CD | matrix CI, PR-triage workflow, Dockerfile, Makefile |
 | Terraform / IaC (plus) | Trivy scans planted insecure `.tf` |
-| Structured output + tool calling | pydantic schemas + forced tool use |
+| Structured output + tool calling | Pydantic contracts + forced tool use |
 
 ---
 
 ## Architecture
 
-AutoTriage is a three-stage pipeline over two typed contracts (`Finding` and `TriageDecision`, defined once in `autotriage.schema`), with an evaluation loop and a human-in-the-loop escalation path.
+A three-stage pipeline over two typed contracts (`Finding` and `TriageDecision`, defined once in `autotriage.schema`), with an evaluation loop and a human-in-the-loop escalation path.
 
 ```mermaid
 flowchart LR
@@ -38,26 +48,22 @@ flowchart LR
         GL --> N
         N --> F["Finding[]<br/>findings.json"]
     end
-
     subgraph triage["2 · Triage"]
         F --> A{{"Claude agent<br/>(SDK or API backend)"}}
         A --> D["TriageDecision<br/>verdict · severity · confidence"]
     end
-
     subgraph act["3 · Act"]
         D --> G{confidence ≥ 0.6<br/>and not needs_human?}
         G -- yes --> T[file ticket · assign owner · draft PR]
         G -- no --> H[[escalate to human]]
     end
-
     D -.-> E[["eval harness<br/>precision / recall"]]
     E -.->|tune rubric & threshold| A
-
     classDef human fill:#fde68a,stroke:#b45309,color:#111;
     class H human;
 ```
 
-See [`docs/architecture.md`](docs/architecture.md) for the full data-flow write-up.
+Full write-up, C4 views, and trust boundaries: [`docs/architecture.md`](docs/architecture.md).
 
 ---
 
@@ -65,103 +71,91 @@ See [`docs/architecture.md`](docs/architecture.md) for the full data-flow write-
 
 ```bash
 # 1. Environment
-python -m venv .venv
-source .venv/bin/activate
+python -m venv .venv && source .venv/bin/activate
 pip install -e ".[agent,dev]"
 
-# 2. Install the scanners (macOS/Homebrew shown; see each tool's docs for Linux)
-pip install semgrep
-brew install trivy gitleaks
+# 2. Scanners (macOS/Homebrew shown; see each tool's docs for Linux)
+pip install semgrep && brew install trivy gitleaks
 
 # 3. Scan a target into normalized findings
 python -m autotriage.scanners target/ -o findings.json
 
-# 4. Triage the findings (choose the SDK or the raw Messages API backend)
-python -m autotriage --findings findings.json --backend sdk
-
-#    Preview without writing tickets or PRs:
-python -m autotriage --findings findings.json --dry-run
+# 4. Triage (SDK or Messages API backend). --dry-run previews without writing.
+python -m autotriage --findings findings.json --backend api
 
 # 5. Score triage quality against the labeled set (offline stub — no API key)
 python evals/run_eval.py --stub
 ```
 
-The agent needs an `ANTHROPIC_API_KEY` in the environment for live triage; `--dry-run` and `run_eval.py --stub` run without one.
+Live triage needs `ANTHROPIC_API_KEY` in the environment; `--dry-run` and `run_eval.py --stub` run without one. Common dev tasks are wrapped in the [`Makefile`](Makefile) (`make all`, `make cov`, `make security`), and a container image is provided ([`Dockerfile`](Dockerfile)). Configuration reference: [`docs/configuration.md`](docs/configuration.md).
 
 ---
 
-## Standards & quality
+## Documentation
 
-The code targets professional Python engineering standards, enforced automatically rather than by convention:
+| Area | Documents |
+|---|---|
+| **Architecture & design** | [Architecture](docs/architecture.md) · [ADRs](docs/adr/README.md) · [Data contracts](docs/data-contracts.md) |
+| **Security** | [Threat model (STRIDE)](docs/threat-model.md) · [Security posture](docs/security-posture.md) · [Escalation policy](docs/escalation-policy.md) · [SECURITY.md](SECURITY.md) |
+| **Operations** | [Operations & SLOs](docs/operations.md) · [Deployment](docs/deployment.md) · [Configuration](docs/configuration.md) · [Runbooks](docs/runbooks/) |
+| **Quality** | [Eval methodology](docs/eval-methodology.md) · [Sample risk summary](docs/risk-summary-sample.md) · [`examples/`](examples/) (real generated output) |
+| **Contributing** | [CONTRIBUTING](CONTRIBUTING.md) · [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) · [CHANGELOG](CHANGELOG.md) · [SUPPORT](SUPPORT.md) |
 
-- **PEP 8** style and **PEP 257** docstrings — checked by `ruff check` (with the `D` pydocstyle rules).
-- **PEP 484** type hints on every public interface — checked by `mypy --strict` (`mypy src`).
-- **Formatting** — `ruff format` (single source of truth, no drift).
-- **Tests** — `pytest` over the schema, scanner normalization, and eval harness.
-- **Pre-commit** — `pre-commit install` wires ruff + mypy + hygiene hooks to run on every commit.
-- **CI** — GitHub Actions runs the exact same gate on every push and pull request (`.github/workflows/ci.yml`), and a second workflow (`.github/workflows/triage.yml`) runs a full scan→triage on each PR and uploads the summary as an artifact.
+---
+
+## Testing & quality
+
+The quality gate is enforced automatically in CI (`.github/workflows/ci.yml`), on a Python **3.11 / 3.12 matrix** — not by convention:
+
+- **PEP 8 / PEP 257** — `ruff check` (incl. `D` pydocstyle + `B` bugbear rules) and `ruff format --check`.
+- **PEP 484 strict typing** — `mypy --strict` over `src` (the package ships a `py.typed` marker).
+- **Test pyramid — 49 tests, ~90% branch coverage** (gate: `--cov-fail-under=80`):
+  unit (schema, scanners, tools, eval) · **integration** (full scan→triage→act flow with a *mocked* LLM, no network) · **property-based** ([Hypothesis](https://hypothesis.readthedocs.io/): normalizers never crash, guardrail invariants always hold) · **golden/snapshot** (ticket & PR rendering) · **CLI**.
+- **Security self-scanning** — `bandit -r src` (SAST on our own code) and `pip-audit` (dependency CVE audit) run in CI.
+- **Supply chain** — Dependabot (pip + actions), minimum-version floors, `detect-private-key` pre-commit hook.
+
+Run the whole gate locally with `make all && make cov && make security`.
 
 ---
 
 ## Guardrails & safety
 
-AutoTriage is designed to act autonomously *only* where it is safe to, and to fail toward human review everywhere else. The rules are enforced in code, not just in the prompt:
+AutoTriage acts autonomously *only* where it is safe to, and fails toward human review everywhere else — enforced in code, not just the prompt:
 
-- **Confidence threshold → human escalation.** Any `TriageDecision` with `confidence < 0.6` is coerced by a pydantic validator to `verdict = needs_human` and `recommended_action = escalate`. The agent can never silently auto-action something it is unsure about.
-- **Prompt-injection defense.** Scanner output — code snippets, finding descriptions, dependency metadata — is treated as **untrusted input**. The system prompt instructs the model to never follow instructions embedded in that data; it is evidence to reason about, never a command to obey.
-- **Human-in-the-loop.** Every side effect goes through a validated **tool call** (no free-text actions). `CRITICAL` findings auto-open a ticket but require human sign-off before any remediation PR is merged. See [`docs/escalation-policy.md`](docs/escalation-policy.md) for the full decision table.
+- **Confidence threshold → human escalation.** Any `TriageDecision` with `confidence < 0.6` is coerced by a Pydantic validator to `verdict = needs_human` / `recommended_action = escalate`. The agent can never silently auto-action something it is unsure about.
+- **Fail closed.** If a finding can't be triaged (malformed model output or a transient API error), the batch does not abort — that finding is escalated to a human.
+- **Prompt-injection defense.** Scanner output (code snippets, descriptions, dependency metadata) is treated as **untrusted input**; the system prompt forbids following instructions embedded in it. See [ADR-0006](docs/adr/0006-treat-scanner-output-as-untrusted.md).
+- **Human-in-the-loop.** Every side effect goes through a validated tool call. `CRITICAL` findings auto-open a ticket but require human sign-off before any remediation PR is merged. Full decision table: [`docs/escalation-policy.md`](docs/escalation-policy.md).
 
 ---
 
-## Sample output
+## Production readiness
 
-Triaging the 15-finding sample set produces structured decisions like this:
+This is a strong, tested reference implementation with production-*minded* engineering — and it documents its own limits honestly rather than overclaiming.
 
-```json
-{
-  "finding_id": "sast-sqli-001",
-  "verdict": "true_positive",
-  "severity": "critical",
-  "confidence": 0.97,
-  "business_impact": "Unauthenticated SQL injection on the user lookup path could expose the full customer/payments datastore.",
-  "reasoning": "User-controlled `username` is interpolated into the query via an f-string with no parameterization; directly exploitable.",
-  "recommended_action": "draft_pr",
-  "suggested_owner": "@payments-backend",
-  "remediation": "Use a parameterized query: cursor.execute(\"SELECT * FROM users WHERE name = %s\", (username,))",
-  "cwe": ["CWE-89"]
-}
-```
-
-and, for the two planted false positives, a suppression instead of a ticket:
-
-```json
-{
-  "finding_id": "secret-fp-015",
-  "verdict": "false_positive",
-  "severity": "info",
-  "confidence": 0.93,
-  "business_impact": "None — AKIAIOSFODNN7EXAMPLE is AWS's public documentation placeholder, not a live credential.",
-  "reasoning": "The match is a well-known AWS docs example key inside a comment; no real secret is exposed.",
-  "recommended_action": "suppress",
-  "cwe": ["CWE-798"]
-}
-```
-
-A stakeholder-facing roll-up of a full run is in [`docs/risk-summary-sample.md`](docs/risk-summary-sample.md).
+| Implemented | Roadmap (see [operations.md](docs/operations.md) · [threat-model.md](docs/threat-model.md)) |
+|---|---|
+| Typed contracts, strict typing, 49 tests @ ~90% cov, matrix CI, bandit + pip-audit | Async triage + rate-limit/backoff (currently sequential) |
+| Guardrails: confidence threshold, fail-closed escalation, prompt-injection defense | Real GitHub/Jira actions + fix-validation re-scan (PRs are drafted as Markdown today) |
+| Structured JSON logging with `run_id`, env-driven config (`config.py`) | Cost/latency metrics, alerting, secret **redaction** in ticket bodies |
+| Eval harness with precision/recall/severity metrics | Larger multi-labeler eval set + CI eval gate; severity-calibration tuning |
 
 ---
 
 ## Repository layout
 
 ```
-src/autotriage/     schema (contracts) · scanners · agent · action tools · __main__ CLI
-fixtures/           findings.sample.json — the 15-finding contract fixture
-evals/              labeled ground truth + run_eval.py precision/recall scorer
-target/             deliberately vulnerable app (SQLi, secrets, insecure Terraform)
-docs/               architecture · escalation policy · sample risk summary
-.github/workflows/  ci.yml (lint/type/test) · triage.yml (scan→triage on PRs)
+src/autotriage/    schema · scanners · agent · prompts · tools · config · observability · __main__
+tests/             unit + integration (mocked LLM) + property (Hypothesis) + golden + cli
+fixtures/          findings.sample.json — the 15-finding contract fixture
+evals/             labeled ground truth + run_eval.py precision/recall scorer
+target/            deliberately vulnerable app (SQLi, secrets, insecure Terraform) — DO NOT DEPLOY
+examples/          real generated tickets, PRs, tracker, eval report, and a live 44-finding scan
+docs/              architecture · ADRs · threat model · runbooks · operations · configuration · …
+.github/           ci.yml + triage.yml · issue/PR templates · dependabot · CODEOWNERS
+Dockerfile · Makefile · pyproject.toml   container · dev tasks · packaging + tooling config
 ```
 
 ---
 
-*Built with [Claude Code](https://claude.com/claude-code) and orchestrated as parallel Claude agents — the contracts in `autotriage.schema` let five workstreams (target, scanners, agent, eval, docs/CI) be built concurrently and integrated without conflicts. AutoTriage builds agents; it doesn't just chat with them.*
+*Built with [Claude Code](https://claude.com/claude-code), orchestrated as parallel Claude agents — the typed contracts in `autotriage.schema` let independent workstreams (target, scanners, agent, eval, docs, tests, prod tooling) be built concurrently and integrated without conflicts. AutoTriage builds agents; it doesn't just chat with them.*

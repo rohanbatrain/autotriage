@@ -1,0 +1,24 @@
+# Repository code ownership for AutoTriage.
+#
+# GitHub requests a review from the owner(s) when a PR touches matching paths.
+# Precedence is "last match wins". This file governs the *repository*; it is
+# distinct from the demo app's CODEOWNERS at target/CODEOWNERS that the agent
+# uses to assign finding owners (see docs/configuration.md).
+
+# Default owner for everything.
+*                       @rohanbatrain
+
+# Source, tests, and packaging.
+/src/                   @rohanbatrain
+/tests/                 @rohanbatrain
+/pyproject.toml         @rohanbatrain
+
+# Documentation and runbooks.
+/docs/                  @rohanbatrain
+*.md                    @rohanbatrain
+
+# CI, automation, and repo governance.
+/.github/               @rohanbatrain
+
+# Evaluation harness and labeled ground truth (triage-quality gate).
+/evals/                 @rohanbatrain
