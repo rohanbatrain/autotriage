@@ -12,11 +12,13 @@ model itself decides when to act.
 
 from __future__ import annotations
 
+import contextlib
 from datetime import UTC, datetime
 from fnmatch import fnmatch
 from pathlib import Path, PurePosixPath
 from typing import TYPE_CHECKING, Any
 
+from autotriage import observability
 from autotriage.schema import Action, Finding, TriageDecision
 
 if TYPE_CHECKING:
@@ -295,25 +297,30 @@ def dispatch(
         ticket = file_ticket(
             finding, decision, tickets_dir=tickets_dir, tracker_path=tracker_path
         )
-        return f"opened ticket {ticket.name}"
-    if action is Action.DRAFT_PR:
+        summary = f"opened ticket {ticket.name}"
+    elif action is Action.DRAFT_PR:
         pr = draft_pr(finding, decision, out_dir=pr_dir)
         file_ticket(
             finding, decision, tickets_dir=tickets_dir, tracker_path=tracker_path
         )
-        return f"drafted PR {pr.name} and opened tracking ticket"
-    if action is Action.ESCALATE:
+        summary = f"drafted PR {pr.name} and opened tracking ticket"
+    elif action is Action.ESCALATE:
         escalate(finding, decision, tracker_path=tracker_path)
-        return "escalated to human review"
-    # Action.SUPPRESS — record the suppression but take no further action.
-    _append_tracker_row(
-        tracker_path,
-        finding,
-        decision,
-        action_label="suppress",
-        owner=decision.suggested_owner or "n/a",
-    )
-    return "suppressed (false positive)"
+        summary = "escalated to human review"
+    else:
+        # Action.SUPPRESS — record the suppression but take no further action.
+        _append_tracker_row(
+            tracker_path,
+            finding,
+            decision,
+            action_label="suppress",
+            owner=decision.suggested_owner or "n/a",
+        )
+        summary = "suppressed (false positive)"
+    # Best-effort telemetry: logging must never break dispatch.
+    with contextlib.suppress(Exception):
+        observability.log_action(finding, summary)
+    return summary
 
 
 # ---------------------------------------------------------------------------

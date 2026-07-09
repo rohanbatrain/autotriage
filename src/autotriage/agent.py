@@ -18,11 +18,13 @@ neither ``anthropic`` nor ``claude_agent_sdk`` is installed.
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import os
 import sys
 from collections.abc import Sequence
 from typing import Any, cast
 
+from autotriage import observability
 from autotriage.prompts import SYSTEM_PROMPT, render_finding_prompt
 from autotriage.schema import Action, Finding, Severity, TriageDecision, Verdict
 
@@ -305,15 +307,17 @@ def triage_all(
     decisions: list[TriageDecision] = []
     for finding in findings:
         try:
-            decisions.append(triage_finding(finding, backend=backend, model=model))
+            decision = triage_finding(finding, backend=backend, model=model)
         except Exception as exc:  # noqa: BLE001 - fail closed to human escalation
             print(
                 f"[triage] {finding.id}: {type(exc).__name__}: {exc}; escalating",
                 file=sys.stderr,
             )
-            decisions.append(
-                _escalation_fallback(finding, f"{type(exc).__name__}: {exc}")
-            )
+            decision = _escalation_fallback(finding, f"{type(exc).__name__}: {exc}")
+        decisions.append(decision)
+        # Best-effort telemetry: logging must never break the triage batch.
+        with contextlib.suppress(Exception):
+            observability.log_decision(finding, decision)
     return decisions
 
 

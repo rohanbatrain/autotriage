@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or usage help
+    url: https://github.com/rohanbatrain/autotriage/discussions
+    about: Ask questions and discuss ideas. Please check the troubleshooting runbook first.
+  - name: Documentation & runbooks
+    url: https://github.com/rohanbatrain/autotriage/tree/main/docs
+    about: Configuration reference, operations, deployment, and runbooks.
+  - name: Report a security vulnerability
+    url: https://github.com/rohanbatrain/autotriage/security/advisories/new
+    about: Please report vulnerabilities privately — do NOT open a public issue.

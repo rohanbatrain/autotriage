@@ -1,0 +1,43 @@
+# Version control & CI
+.git
+.github
+.gitignore
+.pre-commit-config.yaml
+
+# Virtualenvs / local envs
+.venv
+venv
+.env
+
+# Python caches & build artifacts
+__pycache__
+**/__pycache__
+*.py[cod]
+*.egg-info
+build
+dist
+.mypy_cache
+.ruff_cache
+.pytest_cache
+.coverage
+htmlcov
+
+# Tests, docs, examples (not needed in the runtime image)
+tests
+docs
+examples
+
+# Local run outputs
+tickets
+pull_requests
+TRACKER.md
+findings.json
+
+# Editor / OS cruft
+.idea
+.vscode
+.DS_Store
+
+# Docs we don't need in the build context
+CHANGELOG.md
+CONTRIBUTING.md

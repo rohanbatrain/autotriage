@@ -15,15 +15,17 @@ import json
 from collections import Counter
 from pathlib import Path
 
+from autotriage import observability
 from autotriage.agent import DEFAULT_MODEL, triage_finding
+from autotriage.config import Settings, get_settings
+from autotriage.observability import configure_logging, new_run_id
 from autotriage.schema import Action, Finding, TriageDecision
 from autotriage.tools import assign_owner, dispatch
 
+#: Findings input has no configurable setting; keep its historical default here.
 _DEFAULT_FINDINGS = Path("fixtures/findings.sample.json")
-_DEFAULT_CODEOWNERS = Path("target/CODEOWNERS")
-_DEFAULT_TICKETS_DIR = Path("tickets")
-_DEFAULT_TRACKER = Path("TRACKER.md")
-_DEFAULT_PR_DIR = Path("pull_requests")
+
+_LOGGER = observability.get_logger(__name__)
 
 
 def _load_findings(path: Path) -> list[Finding]:
@@ -39,8 +41,18 @@ def _load_findings(path: Path) -> list[Finding]:
     return [Finding.model_validate(item) for item in data]
 
 
-def _build_parser() -> argparse.ArgumentParser:
-    """Construct the argument parser for the CLI."""
+def _build_parser(settings: Settings) -> argparse.ArgumentParser:
+    """Construct the argument parser for the CLI.
+
+    Flag defaults are sourced from ``settings`` (env / ``.env`` backed), so an
+    explicit command-line flag always overrides the environment.
+
+    Args:
+        settings: The resolved runtime settings supplying flag defaults.
+
+    Returns:
+        The configured argument parser.
+    """
     parser = argparse.ArgumentParser(
         prog="autotriage",
         description="Autonomously triage scanner findings and take action.",
@@ -54,12 +66,12 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--backend",
         choices=("api", "sdk"),
-        default="api",
+        default=settings.backend,
         help="Triage backend to use (default: %(default)s).",
     )
     parser.add_argument(
         "--model",
-        default=None,
+        default=settings.model,
         help=f"Model id override (default: {DEFAULT_MODEL} or $AUTOTRIAGE_MODEL).",
     )
     parser.add_argument(
@@ -70,25 +82,25 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--tickets-dir",
         type=Path,
-        default=_DEFAULT_TICKETS_DIR,
+        default=settings.tickets_dir,
         help="Directory for ticket files (default: %(default)s).",
     )
     parser.add_argument(
         "--codeowners",
         type=Path,
-        default=_DEFAULT_CODEOWNERS,
+        default=settings.codeowners,
         help="Path to a CODEOWNERS file (default: %(default)s).",
     )
     parser.add_argument(
         "--tracker",
         type=Path,
-        default=_DEFAULT_TRACKER,
+        default=settings.tracker_path,
         help="Path to the TRACKER.md ledger (default: %(default)s).",
     )
     parser.add_argument(
         "--pr-dir",
         type=Path,
-        default=_DEFAULT_PR_DIR,
+        default=settings.pr_dir,
         help="Directory for remediation PR drafts (default: %(default)s).",
     )
     return parser
@@ -133,8 +145,24 @@ def main() -> int:
     Returns:
         A process exit code (``0`` on success).
     """
-    args = _build_parser().parse_args()
+    settings = get_settings()
+    configure_logging(settings.log_level, settings.log_format)
+    run_id = new_run_id()
+
+    args = _build_parser(settings).parse_args()
     findings = _load_findings(args.findings)
+
+    _LOGGER.info(
+        "run started",
+        extra={
+            "event": "run.started",
+            "run_id": run_id,
+            "findings": len(findings),
+            "backend": args.backend,
+            "model": args.model,
+            "dry_run": args.dry_run,
+        },
+    )
 
     decisions: list[TriageDecision] = []
     actions: list[str] = []
@@ -154,6 +182,18 @@ def main() -> int:
                 pr_dir=args.pr_dir,
             )
             actions.append(f"{finding.id}: {summary}")
+
+    escalations = sum(1 for d in decisions if d.recommended_action is Action.ESCALATE)
+    _LOGGER.info(
+        "run complete",
+        extra={
+            "event": "run.complete",
+            "findings": len(decisions),
+            "escalations": escalations,
+            "actions": len(actions),
+            "dry_run": args.dry_run,
+        },
+    )
 
     _print_summary(decisions, actions, dry_run=args.dry_run)
     return 0

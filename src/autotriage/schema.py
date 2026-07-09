@@ -41,7 +41,7 @@ class FindingType(StrEnum):
     SAST = "SAST"
     SCA = "SCA"
     IAC = "IAC"
-    SECRET = "SECRET"
+    SECRET = "SECRET"  # nosec B105 - enum member name, not a credential
 
 
 class Severity(StrEnum):
