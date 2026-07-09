@@ -91,10 +91,31 @@ Live triage needs `ANTHROPIC_API_KEY` in the environment; `--dry-run` and `run_e
 
 ---
 
+## Demos
+
+Terminal recordings (made with [VHS](https://github.com/charmbracelet/vhs) — regenerate any time with `make demos`):
+
+**The CLI surface** — `python -m autotriage --help`
+
+![CLI help](docs/media/help.gif)
+
+**Offline evaluation** — `python evals/run_eval.py --stub` scores triage against the labeled set, no API key needed:
+
+![Evaluation](docs/media/eval.gif)
+
+**Quality gate** — the full test suite:
+
+![Tests](docs/media/tests.gif)
+
+> Every command and end-to-end flow is documented in **[docs/USAGE.md](docs/USAGE.md)**; a guided walkthrough of the code is in **[docs/CODE_TOUR.md](docs/CODE_TOUR.md)**.
+
+---
+
 ## Documentation
 
 | Area | Documents |
 |---|---|
+| **Getting started** | [Usage — every command & flow](docs/USAGE.md) · [Code tour](docs/CODE_TOUR.md) |
 | **Architecture & design** | [Architecture](docs/architecture.md) · [ADRs](docs/adr/README.md) · [Data contracts](docs/data-contracts.md) |
 | **Security** | [Threat model (STRIDE)](docs/threat-model.md) · [Security posture](docs/security-posture.md) · [Escalation policy](docs/escalation-policy.md) · [SECURITY.md](SECURITY.md) |
 | **Operations** | [Operations & SLOs](docs/operations.md) · [Deployment](docs/deployment.md) · [Configuration](docs/configuration.md) · [Runbooks](docs/runbooks/) |
