@@ -308,9 +308,7 @@ def triage_finding(
         return _triage_via_api(finding, model=resolved)
     if backend == "sdk":
         return _triage_via_sdk(finding, model=resolved)
-    raise ValueError(
-        f"Unknown backend {backend!r}; expected 'api', 'sdk' or 'stub'."
-    )
+    raise ValueError(f"Unknown backend {backend!r}; expected 'api', 'sdk' or 'stub'.")
 
 
 def _propose_fix_via_api(

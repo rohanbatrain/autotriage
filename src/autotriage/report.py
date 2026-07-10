@@ -76,13 +76,9 @@ def render_markdown_report(  # noqa: PLR0913 — display options, all with defau
         A GitHub-flavored Markdown document, prefixed with :data:`COMMENT_MARKER`.
     """
     by_id = {d.finding_id: d for d in decisions}
-    tickets = sum(
-        1 for d in decisions if d.recommended_action is Action.OPEN_TICKET
-    )
+    tickets = sum(1 for d in decisions if d.recommended_action is Action.OPEN_TICKET)
     prs = sum(1 for d in decisions if d.recommended_action is Action.DRAFT_PR)
-    escalations = sum(
-        1 for d in decisions if d.recommended_action is Action.ESCALATE
-    )
+    escalations = sum(1 for d in decisions if d.recommended_action is Action.ESCALATE)
     suppressed = sum(1 for d in decisions if d.recommended_action is Action.SUPPRESS)
 
     backend_label = {"api": "Claude (Messages API)", "sdk": "Claude Agent SDK"}.get(
@@ -130,9 +126,7 @@ def render_markdown_report(  # noqa: PLR0913 — display options, all with defau
                 sev=_SEVERITY_BADGE.get(decision.severity, decision.severity.value),
                 title=_escape_cell(finding.title),
                 loc=_escape_cell(_short_location(finding)),
-                verdict=_VERDICT_LABEL.get(
-                    decision.verdict, decision.verdict.value
-                ),
+                verdict=_VERDICT_LABEL.get(decision.verdict, decision.verdict.value),
                 conf=decision.confidence,
                 action=_ACTION_LABEL.get(
                     decision.recommended_action, decision.recommended_action.value
