@@ -6,8 +6,9 @@
 PYTHON ?= python
 PKG := autotriage
 TARGET ?= target
+BACKEND ?= stub
 
-.PHONY: install lint format typecheck test cov security scan triage eval docker-build demos all
+.PHONY: install lint format typecheck test cov security scan triage eval demo docker-build demos all
 
 install:  ## Install the package with agent + dev extras (editable).
 	$(PYTHON) -m pip install -e ".[agent,dev]"
@@ -39,6 +40,15 @@ triage:  ## Run the triage pipeline over findings.json.
 
 eval:  ## Run the offline eval harness with the stub backend.
 	$(PYTHON) evals/run_eval.py --stub
+
+demo:  ## Full local pipeline on the target: scan -> triage -> tickets/PRs + summary.
+	@# Offline by default (BACKEND=stub, no API key). Use `make demo BACKEND=api` for live Claude triage.
+	$(PYTHON) -m $(PKG).scanners $(TARGET) -o findings.json
+	$(PYTHON) -m $(PKG) --findings findings.json --backend $(BACKEND) \
+		--codeowners $(TARGET)/CODEOWNERS --summary-md demo-out/summary.md \
+		--tickets-dir demo-out/tickets --pr-dir demo-out/pull_requests \
+		--tracker demo-out/TRACKER.md
+	@echo "" && echo "===== triage summary (demo-out/summary.md) =====" && cat demo-out/summary.md
 
 docker-build:  ## Build the container image.
 	docker build -t $(PKG):latest .

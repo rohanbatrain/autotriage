@@ -14,6 +14,20 @@ Built with the Claude Agent SDK (and an Anthropic Messages API backend). AutoTri
 
 > On a live scan of the bundled vulnerable target, AutoTriage triaged **44 real findings into 24 tickets and 20 human escalations**; on the labeled eval set it scored **100% verdict accuracy** with both planted false positives correctly suppressed.
 
+### ▶️ See it run live on a pull request
+
+[**NimbusPay**](https://github.com/rohanbatrain/nimbuspay-web) is a companion demo repo — a (fictional) payments app that consumes AutoTriage as a one-line GitHub Action. Opening a PR runs the full pipeline in CI and the agent **comments its triage inline**:
+
+- **Live pipeline:** [nimbuspay-web PR #1](https://github.com/rohanbatrain/nimbuspay-web/pull/1) — real Semgrep/Trivy/Gitleaks scan → Claude triage → verdict comment (46 findings → tickets, fix PRs, and human escalations, all posted on the PR).
+- **Drop-in usage:** any repo adopts it in one block —
+  ```yaml
+  - uses: rohanbatrain/autotriage@main
+    with:
+      anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+  ```
+  (No key on a fork PR? It falls back to a deterministic offline backend instead of failing the build.)
+- **Locally, no key needed:** `make demo` runs scan → triage → tickets/PRs → summary against the bundled target with the offline backend (`make demo BACKEND=api` for live Claude triage).
+
 ---
 
 ## JD coverage map

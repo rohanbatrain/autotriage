@@ -23,6 +23,7 @@ venv/
 /tickets/
 /pull_requests/
 /TRACKER.md
+/demo-out/
 /evals/report.md
 *.err
 
