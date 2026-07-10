@@ -27,6 +27,10 @@ inputs:
     description: "Cost guardrail: triage at most this many findings (most severe first)."
     required: false
     default: "80"
+  codeowners:
+    description: "Path to a CODEOWNERS file used to assign an owner to each finding."
+    required: false
+    default: ""
   comment:
     description: "Post/update a pull-request comment with the triage summary."
     required: false
@@ -57,7 +61,11 @@ runs:
       run: pip install semgrep
 
     - name: Install Trivy
-      uses: aquasecurity/setup-trivy@v0.2.0
+      shell: bash
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \
+          | sh -s -- -b "$RUNNER_TEMP/bin"
+        echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
 
     - name: Install Gitleaks
       shell: bash
@@ -85,8 +93,9 @@ runs:
           BACKEND=stub
           echo "::notice title=AutoTriage::No API key available; using the offline stub backend."
         fi
-        MODEL_ARG=()
-        if [ -n "${AUTOTRIAGE_MODEL}" ]; then MODEL_ARG=(--model "${AUTOTRIAGE_MODEL}"); fi
+        EXTRA_ARGS=()
+        if [ -n "${AUTOTRIAGE_MODEL}" ]; then EXTRA_ARGS+=(--model "${AUTOTRIAGE_MODEL}"); fi
+        if [ -n "${{ inputs.codeowners }}" ]; then EXTRA_ARGS+=(--codeowners "${{ inputs.codeowners }}"); fi
         python -m autotriage \
           --findings findings.json \
           --backend "$BACKEND" \
@@ -95,7 +104,7 @@ runs:
           --pr-dir autotriage-out/pull_requests \
           --tracker autotriage-out/TRACKER.md \
           --summary-md autotriage-out/summary.md \
-          "${MODEL_ARG[@]}"
+          "${EXTRA_ARGS[@]}"
 
     - name: Publish job summary
       if: always()

@@ -25,7 +25,10 @@ jobs:
         run: pip install semgrep
 
       - name: Install Trivy
-        uses: aquasecurity/setup-trivy@v0.2.0
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \
+            | sh -s -- -b "$RUNNER_TEMP/bin"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
 
       - name: Install Gitleaks
         run: |
