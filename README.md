@@ -136,6 +136,7 @@ Terminal recordings (made with [VHS](https://github.com/charmbracelet/vhs) — r
 | Area | Documents |
 |---|---|
 | **Getting started** | [Usage — every command & flow](docs/USAGE.md) · [Code tour](docs/CODE_TOUR.md) |
+| **Live demo & Action** | [Live demo & the GitHub Action](docs/live-demo.md) · [nimbuspay-web PR #1](https://github.com/rohanbatrain/nimbuspay-web/pull/1) |
 | **Architecture & design** | [Architecture](docs/architecture.md) · [ADRs](docs/adr/README.md) · [Data contracts](docs/data-contracts.md) |
 | **Security** | [Threat model (STRIDE)](docs/threat-model.md) · [Security posture](docs/security-posture.md) · [Escalation policy](docs/escalation-policy.md) · [SECURITY.md](SECURITY.md) |
 | **Operations** | [Operations & SLOs](docs/operations.md) · [Deployment](docs/deployment.md) · [Configuration](docs/configuration.md) · [Runbooks](docs/runbooks/) |

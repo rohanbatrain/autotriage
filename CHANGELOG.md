@@ -8,6 +8,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Composite GitHub Action** ([`action.yml`](action.yml)): any repository adopts
+  the full scan → triage → act → comment pipeline in one workflow block
+  (`uses: rohanbatrain/autotriage@main`). Installs the scanners + tool, runs the
+  pipeline, writes the verdict table to the job summary, and **upserts a single
+  pull-request comment**. Reference: [docs/live-demo.md](docs/live-demo.md).
+- **Live end-to-end demo**: companion repo
+  [`nimbuspay-web`](https://github.com/rohanbatrain/nimbuspay-web) — a fictional
+  payments app that consumes the action; opening a PR runs real scanners → live
+  Claude triage → inline verdict comment
+  ([PR #1](https://github.com/rohanbatrain/nimbuspay-web/pull/1)).
+- **Offline `stub` triage backend** (`autotriage.stub`): a deterministic,
+  no-API-key heuristic. The CI action falls back to it when no key is available
+  (e.g. untrusted fork PRs, where GitHub withholds secrets) so the pipeline
+  degrades gracefully instead of failing the build. Also de-duplicates the eval
+  harness's former private copy.
+- **Markdown triage report** (`autotriage.report`): severity-sorted verdict
+  table rendered for the PR comment and `$GITHUB_STEP_SUMMARY`. New CLI flag
+  `--summary-md PATH`.
+- **Cost guardrail** `--max-findings N`: triage only the N most-severe findings
+  and note the remainder in the report.
+- **`make demo`**: one-command local pipeline (scan → triage → tickets/PRs +
+  summary) on the bundled target; offline by default, `BACKEND=api` for live.
 - **Fix-validation loop** (`autotriage.revalidate`): closes the remediation loop
   by applying a proposed fix to an isolated copy of the target and re-running the
   scanner, accepting the fix only when the finding's signature is gone **and** no
@@ -31,7 +53,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `src/autotriage/config.py`.
 
 ### Changed
-- _Nothing yet._
+- **Calibrated the triage confidence rubric** in `autotriage.prompts`: unambiguous,
+  textbook findings (injection on request data, hardcoded credentials, world-open
+  buckets/ports, a dependency with a published CVE and a fix) now get high
+  confidence and are auto-actioned, while only genuinely ambiguous findings fall
+  below the guardrail and escalate. Previously the rubric framed under-confidence
+  as always-safe, which over-escalated clear-cut issues. Live eval verdict
+  accuracy remains 1.0.
+- The self-scan CI workflow now **dogfoods the composite action** against the
+  bundled target instead of duplicating the install/scan/triage steps.
 
 ### Deprecated
 - _Nothing yet._
@@ -40,7 +70,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - _Nothing yet._
 
 ### Fixed
-- _Nothing yet._
+- CI scanner installation: Trivy is installed via the official `install.sh`
+  (the `aquasecurity/setup-trivy@v0.2.0` tag no longer exists) and Gitleaks from
+  a pinned release tarball (its `install.sh` was removed upstream).
 
 ### Security
 - _Nothing yet._
