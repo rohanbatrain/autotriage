@@ -25,8 +25,20 @@ from collections.abc import Sequence
 from typing import Any, cast
 
 from autotriage import observability
-from autotriage.prompts import SYSTEM_PROMPT, render_finding_prompt
-from autotriage.schema import Action, Finding, Severity, TriageDecision, Verdict
+from autotriage.prompts import (
+    FIX_SYSTEM_PROMPT,
+    SYSTEM_PROMPT,
+    render_finding_prompt,
+    render_fix_prompt,
+)
+from autotriage.schema import (
+    Action,
+    Finding,
+    FixPatch,
+    Severity,
+    TriageDecision,
+    Verdict,
+)
 
 #: Fallback action to use when a model omits ``recommended_action``, keyed by
 #: the verdict it did provide.
@@ -41,6 +53,9 @@ DEFAULT_MODEL = "claude-sonnet-5"
 
 #: Name of the forced structured-output tool used by the ``"api"`` backend.
 _SUBMIT_TOOL_NAME = "submit_triage"
+
+#: Name of the forced structured-output tool used by :func:`propose_fix`.
+_SUBMIT_FIX_TOOL_NAME = "submit_fix"
 
 #: Output-token ceiling for a single triage decision (well under SDK timeouts).
 _MAX_TOKENS = 4096
@@ -290,6 +305,97 @@ def triage_finding(
     raise ValueError(f"Unknown backend {backend!r}; expected 'api' or 'sdk'.")
 
 
+def _propose_fix_via_api(
+    finding: Finding, decision: TriageDecision, *, model: str
+) -> FixPatch:
+    """Generate a machine-applicable :class:`FixPatch` via the Messages API.
+
+    Uses the same forced-tool-call contract as triage, so the model must return
+    a patch that matches the :class:`FixPatch` schema exactly.
+
+    Args:
+        finding: The finding to remediate.
+        decision: The triage decision guiding the remediation.
+        model: The resolved model id.
+
+    Returns:
+        The validated fix patch (which may legitimately have no edits).
+
+    Raises:
+        RuntimeError: If the model does not return the expected tool call.
+    """
+    import anthropic  # noqa: PLC0415
+    from anthropic.types import (  # noqa: PLC0415
+        MessageParam,
+        ToolChoiceToolParam,
+        ToolParam,
+    )
+
+    client = anthropic.Anthropic()
+    tool: ToolParam = {
+        "name": _SUBMIT_FIX_TOOL_NAME,
+        "description": (
+            "Submit the remediation patch as exact search/replace edits. Call "
+            "this exactly once; return an empty edits list if no safe exact fix "
+            "is possible."
+        ),
+        "input_schema": cast("Any", FixPatch.model_json_schema()),
+    }
+    tool_choice: ToolChoiceToolParam = {"type": "tool", "name": _SUBMIT_FIX_TOOL_NAME}
+    messages: list[MessageParam] = [
+        {"role": "user", "content": render_fix_prompt(finding, decision)}
+    ]
+    response = client.messages.create(
+        model=model,
+        max_tokens=_MAX_TOKENS,
+        system=FIX_SYSTEM_PROMPT,
+        tools=[tool],
+        tool_choice=tool_choice,
+        messages=messages,
+    )
+    for block in response.content:
+        if block.type == "tool_use" and block.name == _SUBMIT_FIX_TOOL_NAME:
+            raw = block.input
+            if not isinstance(raw, dict):
+                raise RuntimeError(
+                    f"submit_fix returned a non-object input: {type(raw)!r}"
+                )
+            data = dict(raw)
+            data["finding_id"] = finding.id
+            return FixPatch.model_validate(data)
+    raise RuntimeError(
+        f"Model did not call {_SUBMIT_FIX_TOOL_NAME!r} for finding {finding.id!r}."
+    )
+
+
+def propose_fix(
+    finding: Finding,
+    decision: TriageDecision,
+    *,
+    model: str | None = None,
+) -> FixPatch:
+    """Ask the agent for a machine-applicable fix for one finding.
+
+    This is the generation half of the fix-validation loop; the verification
+    half lives in :mod:`autotriage.revalidate`, which applies the returned patch
+    to an isolated copy and re-scans to confirm the finding is gone. Only the
+    ``"api"`` backend is supported for fix generation (the most reliable path).
+
+    Args:
+        finding: The finding to remediate.
+        decision: The triage decision guiding the remediation.
+        model: Optional model override (see :func:`triage_finding`).
+
+    Returns:
+        The proposed fix patch (possibly empty if no safe exact fix exists).
+
+    Raises:
+        RuntimeError: If ``ANTHROPIC_API_KEY`` is unset or the backend fails.
+    """
+    _require_api_key()
+    return _propose_fix_via_api(finding, decision, model=_resolve_model(model))
+
+
 def triage_all(
     findings: Sequence[Finding], *, backend: str = "api", model: str | None = None
 ) -> list[TriageDecision]:
@@ -321,4 +427,4 @@ def triage_all(
     return decisions
 
 
-__all__ = ["DEFAULT_MODEL", "triage_all", "triage_finding"]
+__all__ = ["DEFAULT_MODEL", "propose_fix", "triage_all", "triage_finding"]

@@ -1,0 +1,40 @@
+[
+  {
+    "finding_id": "66f87406fa87",
+    "edits": [
+      {
+        "file": "infra/main.tf",
+        "search": "cidr_blocks = [\"0.0.0.0/0\"]",
+        "replace": "cidr_blocks = [\"10.0.0.0/16\"]"
+      }
+    ],
+    "rationale": "Restrict SSH ingress to an internal CIDR instead of the public internet (0.0.0.0/0)."
+  },
+  {
+    "finding_id": "69aaed1f4f00",
+    "edits": [
+      {
+        "file": "infra/main.tf",
+        "search": "bucket = \"autotriage-sample-data-bucket\"\n  acl    = \"public-read\"",
+        "replace": "bucket = \"autotriage-sample-data-bucket\"\n  acl    = \"private\""
+      },
+      {
+        "file": "infra/main.tf",
+        "search": "bucket = aws_s3_bucket.data.id\n  acl    = \"public-read\"",
+        "replace": "bucket = aws_s3_bucket.data.id\n  acl    = \"private\""
+      }
+    ],
+    "rationale": "Make the bucket private: replace the public-read ACL on both the bucket and its aws_s3_bucket_acl resource."
+  },
+  {
+    "finding_id": "26ce609f12fe",
+    "edits": [
+      {
+        "file": "infra/main.tf",
+        "search": "# Open to the entire internet:",
+        "replace": "# Open to the entire internet: (flagged for review)"
+      }
+    ],
+    "rationale": "NAIVE fix: only annotates the rule with a comment instead of adding a real `description` argument."
+  }
+]

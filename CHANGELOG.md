@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Fix-validation loop** (`autotriage.revalidate`): closes the remediation loop
+  by applying a proposed fix to an isolated copy of the target and re-running the
+  scanner, accepting the fix only when the finding's signature is gone **and** no
+  new finding was introduced. Fails closed (`UNRESOLVED` / `REGRESSED` / `ERROR`)
+  on anything else, including a baseline that can't reproduce the finding or an
+  ambiguous patch. New contracts `FixPatch`, `FileEdit`, `FixValidation`,
+  `ValidationStatus` in `autotriage.schema`; live patch generation via
+  `autotriage.agent.propose_fix` (forced `submit_fix` tool call); CLI
+  `python -m autotriage.revalidate`; design notes in
+  [docs/fix-validation.md](docs/fix-validation.md); a real Trivy-verified example
+  under [examples/fix-validation/](examples/fix-validation/); and 14 offline
+  tests covering the full status matrix plus the ambiguous-match and
+  path-traversal guards.
 - Enterprise operations & governance docs: operations (SLOs/SLIs, error budgets,
   observability, on-call, cost), deployment, configuration reference, and
   runbooks (running, incident-response, rollback, troubleshooting).
