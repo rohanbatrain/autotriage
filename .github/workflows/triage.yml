@@ -1,63 +1,28 @@
 name: Security triage
 
+# Dogfood: AutoTriage triages its own bundled vulnerable target using the very
+# composite action it ships. On a pull request it posts the verdict table as a
+# comment. With no ANTHROPIC_API_KEY secret set, the action falls back to the
+# deterministic offline backend, so this workflow is green without a credential.
 on:
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
-  scan-and-triage:
-    name: Scan and triage findings
+  self-triage:
+    name: Triage the bundled target
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
+      - name: AutoTriage (self-scan)
+        uses: ./
         with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Install AutoTriage (agent extras)
-        run: pip install -e ".[agent]"
-
-      # --- Scanners -------------------------------------------------------
-      - name: Install Semgrep
-        run: pip install semgrep
-
-      - name: Install Trivy
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \
-            | sh -s -- -b "$RUNNER_TEMP/bin"
-          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
-
-      - name: Install Gitleaks
-        run: |
-          set -euo pipefail
-          GL_VER=8.30.1
-          mkdir -p "$RUNNER_TEMP/bin"
-          curl -sSfL \
-            "https://github.com/gitleaks/gitleaks/releases/download/v${GL_VER}/gitleaks_${GL_VER}_linux_x64.tar.gz" \
-            -o "$RUNNER_TEMP/gitleaks.tar.gz"
-          tar -xzf "$RUNNER_TEMP/gitleaks.tar.gz" -C "$RUNNER_TEMP/bin" gitleaks
-          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
-
-      # --- Scan -> triage -------------------------------------------------
-      - name: Run scanners
-        run: python -m autotriage.scanners . -o findings.json
-
-      - name: Triage findings (dry run)
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python -m autotriage --findings findings.json --dry-run
-
-      # --- Publish results ------------------------------------------------
-      - name: Upload triage summary and tickets
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: triage-summary
-          path: |
-            findings.json
-            TRACKER.md
-            tickets/
-          if-no-files-found: ignore
+          scan-path: "target"
+          codeowners: "target/CODEOWNERS"
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
