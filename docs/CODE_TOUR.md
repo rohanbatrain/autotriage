@@ -102,7 +102,7 @@ can bypass it — "if unsure, call a doctor" is enforced at construction time.
 
 | Path | What it is / why it exists |
 |---|---|
-| `fixtures/findings.sample.json` | The 15-finding curated contract fixture; default input for the CLI and eval. |
+| `fixtures/findings.sample.json` | The 17-finding curated contract fixture; default input for the CLI and eval. |
 | `target/` | A deliberately vulnerable demo app (Python SQLi/secrets in `app.py`, insecure Terraform in `infra/main.tf`, vulnerable `requirements.txt`, a `CODEOWNERS`). **Do not deploy.** Excluded from lint/typecheck. |
 | `evals/` | `run_eval.py` (the scorer CLI + offline stub), `labeled_findings.json` (ground truth), and `report.md` (last output). The self-audit. |
 | `tests/` | Unit (`test_schema`, `test_scanners`, `test_agent`, `test_eval`), `test_golden` (ticket/PR snapshots), `test_cli`, `integration/` (full flow with a mocked LLM), and `property/` (Hypothesis invariants). |

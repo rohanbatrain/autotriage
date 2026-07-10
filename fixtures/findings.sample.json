@@ -232,5 +232,35 @@
     "code_snippet": "# e.g. AKIAIOSFODNN7EXAMPLE (AWS docs placeholder)",
     "description": "FALSE POSITIVE: AKIAIOSFODNN7EXAMPLE is AWS's official public documentation example key, not a real credential.",
     "raw": {}
+  },
+  {
+    "id": "sast-cmdexec-amb-016",
+    "tool": "semgrep",
+    "type": "SAST",
+    "rule_id": "python.lang.security.audit.dangerous-subprocess-use",
+    "title": "subprocess call with a non-literal command",
+    "severity_raw": "WARNING",
+    "cwe": ["CWE-78"],
+    "owasp": ["A03:2021"],
+    "file": "target/jobs/runner.py",
+    "line": 58,
+    "code_snippet": "cmd = settings.EXPORT_COMMAND\n    subprocess.run(shlex.split(cmd), check=True)",
+    "description": "AMBIGUOUS: the command is read from application settings (EXPORT_COMMAND). Whether an untrusted user can influence that setting is not determinable from this finding alone; it is exploitable only if the configuration source is user-controlled. Needs human review of where EXPORT_COMMAND is set.",
+    "raw": {}
+  },
+  {
+    "id": "secret-amb-017",
+    "tool": "gitleaks",
+    "type": "SECRET",
+    "rule_id": "generic-api-key",
+    "title": "High-entropy string flagged as a possible API key",
+    "severity_raw": "MEDIUM",
+    "cwe": ["CWE-798"],
+    "owasp": ["A07:2021"],
+    "file": "target/config/defaults.py",
+    "line": 24,
+    "code_snippet": "DEFAULT_TOKEN = \"tok_9f2c1a7b4e8d6035c1aa42f7\"",
+    "description": "AMBIGUOUS: high-entropy value flagged as a possible generic API key. It could be a live credential, or a non-sensitive default/rotated/test token. Confirming requires checking whether it authenticates against a real service; escalate to a human rather than guessing.",
+    "raw": {}
   }
 ]

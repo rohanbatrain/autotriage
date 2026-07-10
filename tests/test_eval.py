@@ -45,6 +45,8 @@ _LABELS: list[tuple[str, Verdict, Severity]] = [
     ("iac-s3noenc-013", Verdict.TRUE_POSITIVE, Severity.LOW),
     ("sast-sqli-fp-014", Verdict.FALSE_POSITIVE, Severity.INFO),
     ("secret-fp-015", Verdict.FALSE_POSITIVE, Severity.INFO),
+    ("sast-cmdexec-amb-016", Verdict.NEEDS_HUMAN, Severity.MEDIUM),
+    ("secret-amb-017", Verdict.NEEDS_HUMAN, Severity.MEDIUM),
 ]
 
 
@@ -85,11 +87,13 @@ def _perfect_decisions() -> list[TriageDecision]:
 def test_perfect_set_scores_all_ones() -> None:
     report = score(_perfect_decisions(), _truth())
 
-    assert report.total == 15
+    assert report.total == 17
     assert report.true_positives == 13
     assert report.false_positives == 0
     assert report.false_negatives == 0
-    assert report.abstentions == 0
+    # The two needs_human ground-truth rows are correctly escalated, not scored
+    # as TP/FP — they count as (correct) abstentions.
+    assert report.abstentions == 2
     assert report.precision == pytest.approx(1.0)
     assert report.recall == pytest.approx(1.0)
     assert report.f1 == pytest.approx(1.0)
@@ -113,22 +117,23 @@ def test_imperfect_set_metrics() -> None:
 
     report = score(decisions, _truth())
 
-    # Classifier tallies: all 13 real TPs caught, plus one false alarm.
+    # Classifier tallies: all 13 real TPs caught, plus one false alarm. The two
+    # needs_human rows are correctly escalated (abstentions), not misclassified.
     assert report.true_positives == 13
     assert report.false_positives == 1
     assert report.false_negatives == 0
-    assert report.abstentions == 0
+    assert report.abstentions == 2
 
     assert report.precision == pytest.approx(13 / 14)
     assert report.recall == pytest.approx(1.0)
     assert report.f1 == pytest.approx(2 * 13 / (2 * 13 + 1))
-    assert report.accuracy == pytest.approx(14 / 15)
+    assert report.accuracy == pytest.approx(16 / 17)
     assert report.severity_agreement == pytest.approx(12 / 13)
 
     passed = {row.finding_id for row in report.results if row.passed}
     assert "secret-fp-015" not in passed  # wrong verdict
     assert "sca-flask-010" not in passed  # wrong severity
-    assert len(passed) == 13
+    assert len(passed) == 15
 
 
 def test_needs_human_counts_as_abstain_recall_miss() -> None:
@@ -138,7 +143,8 @@ def test_needs_human_counts_as_abstain_recall_miss() -> None:
 
     report = score(decisions, _truth())
 
-    assert report.abstentions == 1
+    # One forced abstain on a real TP, plus the two genuine needs_human rows.
+    assert report.abstentions == 3
     assert report.true_positives == 12
     assert report.false_positives == 0
     assert report.false_negatives == 1
@@ -149,11 +155,12 @@ def test_needs_human_counts_as_abstain_recall_miss() -> None:
 def test_load_ground_truth() -> None:
     truth = load_ground_truth(_LABELS_PATH)
 
-    assert len(truth) == 15
+    assert len(truth) == 17
     assert truth["sca-pyyaml-009"].expected_verdict is Verdict.TRUE_POSITIVE
     assert truth["sca-pyyaml-009"].expected_severity is Severity.CRITICAL
     assert truth["secret-fp-015"].expected_verdict is Verdict.FALSE_POSITIVE
     assert truth["secret-fp-015"].expected_severity is Severity.INFO
+    assert truth["secret-amb-017"].expected_verdict is Verdict.NEEDS_HUMAN
 
 
 def test_render_report_contains_sections() -> None:

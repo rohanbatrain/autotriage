@@ -9,13 +9,17 @@ runner is `evals/run_eval.py`.
 ## 1. Ground-truth set
 
 - **Location:** `evals/labeled_findings.json` (labels) against
-  `fixtures/findings.sample.json` (the 15-finding fixture).
-- **Size:** 15 findings — 13 labeled `true_positive`, 2 labeled `false_positive`.
+  `fixtures/findings.sample.json` (the 17-finding fixture).
+- **Size:** 17 findings — 13 labeled `true_positive`, 2 labeled `false_positive`,
+  and 2 labeled `needs_human` (genuinely undecidable without more context), so the
+  set exercises the escalation guardrail and not just the two clear verdicts.
 - **Coverage:** SAST (SQLi, command injection, `eval`, weak MD5, `pickle`, Flask
   debug), SCA (vulnerable `requests`, `PyYAML`, `Flask`), IaC (public S3 ACL,
-  open SSH security group, unencrypted S3), a hardcoded AWS key (secret), and two
+  open SSH security group, unencrypted S3), a hardcoded AWS key (secret), two
   benign false-positive baits (a static example SQL string and AWS's public
-  documentation placeholder key `AKIAIOSFODNN7EXAMPLE`).
+  documentation placeholder key `AKIAIOSFODNN7EXAMPLE`), and two ambiguous cases
+  (a `subprocess` call whose command comes from unspecified config, and a
+  high-entropy token that may or may not be a live secret).
 - **Schema:** each label is a `GroundTruth` record — `finding_id`,
   `expected_verdict`, `expected_severity`. Duplicate `finding_id`s are rejected at
   load time.
@@ -81,12 +85,14 @@ path without an API key; it is **not** a measurement of the LLM agent.
 
 ## 4. Current results
 
-### Verdict quality — 100% on the 15-finding set
+### Verdict quality — 100% on the 17-finding set
 
 The agent reaches **100% verdict accuracy** on the labeled set: all 13 true
-positives identified and **both false positives correctly suppressed** (the static
-example SQL string and the AWS documentation placeholder key), i.e. zero false
-alarms and zero missed positives.
+positives identified, **both false positives correctly suppressed** (the static
+example SQL string and the AWS documentation placeholder key), and **both
+ambiguous findings correctly escalated** to a human (the config-sourced
+`subprocess` command and the maybe-live token) — i.e. zero false alarms, zero
+missed positives, and no guessing on the genuinely undecidable.
 
 | Metric | Value |
 | --- | --- |
@@ -126,8 +132,8 @@ eval-calibration work (see Limitations and Roadmap).
 
 ## 5. Limitations
 
-- **Small set.** 15 findings is enough for a smoke-level quality signal, not a
-  statistically robust benchmark; a single wrong verdict swings accuracy ~6.7
+- **Small set.** 17 findings is enough for a smoke-level quality signal, not a
+  statistically robust benchmark; a single wrong verdict swings accuracy ~6
   points.
 - **Single labeler.** Ground truth is one annotator's judgment, so both verdict
   and (especially) severity labels carry the labeler's bias — there is no

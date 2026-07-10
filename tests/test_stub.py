@@ -16,6 +16,7 @@ from autotriage.schema import (
     Verdict,
 )
 from autotriage.stub import (
+    looks_ambiguous,
     looks_like_false_positive,
     raw_severity_rank,
     severity_rank,
@@ -92,6 +93,21 @@ def test_false_positive_is_suppressed() -> None:
     assert decision.verdict is Verdict.FALSE_POSITIVE
     assert decision.recommended_action is Action.SUPPRESS
     assert decision.severity is Severity.INFO
+
+
+def test_looks_ambiguous_detects_marker_and_id() -> None:
+    assert looks_ambiguous(_finding(description="AMBIGUOUS: reachability unclear"))
+    assert looks_ambiguous(_finding(fid="sast-cmdexec-amb-016"))
+    assert not looks_ambiguous(_finding(description="a clear bug"))
+
+
+def test_ambiguous_finding_is_escalated_via_guardrail() -> None:
+    decision = stub_triage_finding(
+        _finding(fid="sast-x-amb-016", description="AMBIGUOUS: needs more context")
+    )
+    assert decision.verdict is Verdict.NEEDS_HUMAN
+    assert decision.recommended_action is Action.ESCALATE
+    assert decision.confidence < 0.6  # deliberately trips the escalation guardrail
 
 
 def test_stub_triage_returns_one_decision_per_finding() -> None:

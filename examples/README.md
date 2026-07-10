@@ -32,9 +32,10 @@ python -m autotriage.revalidate --target target \
     --report examples/fix-validation/report.md
 ```
 
-On the labeled 15-finding set the agent scored **100% verdict accuracy** (both
-planted false positives correctly suppressed). On a live scan of `target/` it
-triaged **44 raw findings into 24 tickets and 20 human-escalations**.
+On the labeled 17-finding set the agent scored **100% verdict accuracy** (both
+planted false positives suppressed and both ambiguous findings escalated to a
+human). On a live scan of `target/` it triaged **44 raw findings into 24 tickets
+and 20 human-escalations**.
 
 ### The `fix-validation/` example
 

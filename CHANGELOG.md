@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Eval set now exercises the escalation path**: added 2 `needs_human` fixtures
+  (a `subprocess` command sourced from unspecified config; a high-entropy token
+  that may or may not be live) to the labeled set (now 17 findings: 13 TP / 2 FP /
+  2 `needs_human`). The offline stub escalates them via the confidence guardrail
+  and the live agent does too — verdict accuracy stays 1.0 while the confusion
+  matrix's `needs_human` row is finally populated.
 - **Composite GitHub Action** ([`action.yml`](action.yml)): any repository adopts
   the full scan → triage → act → comment pipeline in one workflow block
   (`uses: rohanbatrain/autotriage@main`). Installs the scanners + tool, runs the

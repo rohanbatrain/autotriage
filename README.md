@@ -12,7 +12,7 @@
 
 Built with the Claude Agent SDK (and an Anthropic Messages API backend). AutoTriage turns a raw pile of scanner output into an owned, prioritized, partly self-remediating backlog, and it ships with an **eval harness** that scores its own triage quality against a labeled set — the part most agent demos skip. It also **closes the loop**: a proposed fix is applied to an isolated copy of the code and the scanner re-run, so a remediation is trusted only when the finding is verifiably gone.
 
-> On a live scan of the bundled vulnerable target, AutoTriage triaged **44 real findings into 24 tickets and 20 human escalations**; on the labeled eval set it scored **100% verdict accuracy** with both planted false positives correctly suppressed.
+> On a live scan of the bundled vulnerable target, AutoTriage triaged **44 real findings into 24 tickets and 20 human escalations**; on the labeled eval set it scored **100% verdict accuracy** — both planted false positives suppressed and both ambiguous findings escalated to a human.
 
 ### ▶️ See it run live on a pull request
 
@@ -191,7 +191,7 @@ This is a strong, tested reference implementation with production-*minded* engin
 ```
 src/autotriage/    schema · scanners · agent · prompts · tools · revalidate · config · observability · __main__
 tests/             unit + integration (mocked LLM) + property (Hypothesis) + golden + cli
-fixtures/          findings.sample.json — the 15-finding contract fixture
+fixtures/          findings.sample.json — the 17-finding contract fixture
 evals/             labeled ground truth + run_eval.py precision/recall scorer
 target/            deliberately vulnerable app (SQLi, secrets, insecure Terraform) — DO NOT DEPLOY
 examples/          real generated tickets, PRs, tracker, eval report, and a live 44-finding scan

@@ -68,6 +68,24 @@ def looks_like_false_positive(finding: Finding) -> bool:
     return "false positive" in text or "-fp-" in finding.id.lower()
 
 
+def looks_ambiguous(finding: Finding) -> bool:
+    """Heuristically decide whether a finding is genuinely undecidable offline.
+
+    Some findings cannot be confidently triaged without context the finding does
+    not carry (e.g. whether a config value reaching a command is user-controlled,
+    or whether a high-entropy string is a live secret). The offline backend marks
+    these low-confidence so the guardrail escalates them to a human, exercising
+    the same escalation path the live agent uses.
+
+    Args:
+        finding: The normalized finding to classify.
+
+    Returns:
+        ``True`` if the finding is flagged as requiring human judgement.
+    """
+    return "ambiguous" in finding.description.lower() or "-amb-" in finding.id.lower()
+
+
 def stub_severity(finding: Finding) -> Severity:
     """Assign a severity to a finding without an LLM.
 
@@ -132,6 +150,19 @@ def stub_triage_finding(finding: Finding) -> TriageDecision:
             recommended_action=Action.SUPPRESS,
             cwe=finding.cwe,
         )
+    if looks_ambiguous(finding):
+        # Low confidence → the TriageDecision guardrail coerces this to
+        # needs_human / escalate, so the offline path exercises escalation too.
+        return TriageDecision(
+            finding_id=finding.id,
+            verdict=Verdict.NEEDS_HUMAN,
+            severity=stub_severity(finding),
+            confidence=0.4,
+            business_impact="Exploitability depends on context not in the finding.",
+            reasoning="Cannot be decided without more context; needs human review.",
+            recommended_action=Action.ESCALATE,
+            cwe=finding.cwe,
+        )
     return TriageDecision(
         finding_id=finding.id,
         verdict=Verdict.TRUE_POSITIVE,
@@ -159,6 +190,7 @@ def stub_triage(findings: Sequence[Finding]) -> list[TriageDecision]:
 
 
 __all__ = [
+    "looks_ambiguous",
     "looks_like_false_positive",
     "raw_severity_rank",
     "severity_rank",
