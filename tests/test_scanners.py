@@ -156,6 +156,57 @@ def test_run_semgrep_normalizes_sast(monkeypatch: pytest.MonkeyPatch) -> None:
     assert f.raw == SEMGREP_JSON["results"][0]
 
 
+def test_read_source_lines_reads_range_from_disk(tmp_path: Path) -> None:
+    src = tmp_path / "svc.py"
+    src.write_text("a=1\nb=2\nc=3\nd=4\ne=5\n", encoding="utf-8")
+    # Lines 3..3 with the default context of 2 spans lines 1..5.
+    snippet = scanners._read_source_lines(str(src), 3, 3, context=2)
+    assert snippet == "a=1\nb=2\nc=3\nd=4\ne=5"
+    # No context returns just the requested line.
+    assert scanners._read_source_lines(str(src), 3, 3, context=0) == "c=3"
+    # Missing file / invalid range fail soft.
+    assert scanners._read_source_lines(str(tmp_path / "nope.py"), 1, 1) == ""
+    assert scanners._read_source_lines(str(src), 0, 0) == ""
+
+
+def test_run_semgrep_reads_code_when_lines_redacted(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # Semgrep emits "requires login" for the matched code unless authenticated;
+    # the adapter must fall back to reading the real source from disk.
+    src = tmp_path / "app.py"
+    src.write_text("import os\nos.system('ping ' + host)\n", encoding="utf-8")
+    payload = {
+        "results": [
+            {
+                "check_id": "python.lang.security.audit.dangerous-os-system",
+                "path": str(src),
+                "start": {"line": 2, "col": 1},
+                "end": {"line": 2, "col": 30},
+                "extra": {
+                    "message": "OS command injection.",
+                    "severity": "ERROR",
+                    "lines": "requires login",
+                    "metadata": {},
+                },
+            }
+        ],
+        "errors": [],
+    }
+    monkeypatch.setattr(scanners.shutil, "which", lambda _: "/usr/bin/semgrep")
+    monkeypatch.setattr(
+        scanners.subprocess,
+        "run",
+        lambda *a, **k: _FakeCompletedProcess(stdout=json.dumps(payload)),
+    )
+
+    findings = scanners.run_semgrep(Path("."))
+
+    assert len(findings) == 1
+    assert findings[0].code_snippet != "requires login"
+    assert "os.system('ping ' + host)" in findings[0].code_snippet
+
+
 # ---------------------------------------------------------------------------
 # Trivy
 # ---------------------------------------------------------------------------

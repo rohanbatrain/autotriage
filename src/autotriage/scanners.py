@@ -113,6 +113,41 @@ def _first_line(text: str) -> str:
     return ""
 
 
+#: Placeholder Semgrep emits for matched code when it is not authenticated to
+#: the Semgrep registry; useless to the triage agent, so we read the real source.
+_SEMGREP_REDACTED = "requires login"
+
+
+def _read_source_lines(path: str, start: int, end: int, *, context: int = 2) -> str:
+    """Read source lines ``[start, end]`` (1-based, inclusive) from ``path``.
+
+    Semgrep redacts the matched code to ``"requires login"`` unless the CLI is
+    authenticated, which would leave the triage agent reasoning about a finding
+    without ever seeing the offending code. Reading the lines straight from disk
+    (plus a little surrounding ``context``) restores that evidence so the agent
+    can actually confirm exploitability.
+
+    Args:
+        path: Source file path, relative to the current working directory.
+        start: 1-based first line of the match.
+        end: 1-based last line of the match (may equal or precede ``start``).
+        context: Extra lines to include on each side for readability.
+
+    Returns:
+        The joined source lines, or an empty string if the file cannot be read.
+    """
+    if start <= 0:
+        return ""
+    try:
+        lines = Path(path).read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return ""
+    last = max(start, end)
+    lo = max(0, start - 1 - context)
+    hi = min(len(lines), last + context)
+    return "\n".join(lines[lo:hi]).strip()
+
+
 def _run_json(cmd: list[str], tool: str) -> Any:  # noqa: ANN401 - JSON payload
     """Run ``cmd`` and parse its stdout as JSON, defensively.
 
@@ -179,7 +214,13 @@ def run_semgrep(target: Path) -> list[Finding]:
         rule_id = str(result.get("check_id", "unknown"))
         file = str(result.get("path", ""))
         line = int((result.get("start", {}) or {}).get("line", 0) or 0)
+        end_line = int((result.get("end", {}) or {}).get("line", line) or line)
         message = str(extra.get("message", ""))
+        snippet = str(extra.get("lines", "")).strip()
+        if not snippet or snippet.lower() == _SEMGREP_REDACTED:
+            # Semgrep redacted the code (unauthenticated); read it from disk so
+            # the triage agent can see the actual offending lines.
+            snippet = _read_source_lines(file, line, end_line)
         findings.append(
             Finding(
                 id=Finding.make_id("semgrep", rule_id, file, line),
@@ -192,7 +233,7 @@ def run_semgrep(target: Path) -> list[Finding]:
                 owasp=_extract_owasp(metadata.get("owasp")),
                 file=file,
                 line=line,
-                code_snippet=str(extra.get("lines", "")).strip(),
+                code_snippet=snippet,
                 description=message,
                 raw=result,
             )
