@@ -8,10 +8,13 @@ isolation — while staying fully reproducible in CI.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
 
+from autotriage import revalidate, scanners
+from autotriage.prompts import render_fix_prompt
 from autotriage.revalidate import (
     FixApplyError,
     apply_fix_patch,
@@ -22,12 +25,16 @@ from autotriage.revalidate import (
     validate_fixes,
 )
 from autotriage.schema import (
+    Action,
     FileEdit,
     Finding,
     FindingType,
     FixPatch,
     ScannerTool,
+    Severity,
+    TriageDecision,
     ValidationStatus,
+    Verdict,
 )
 
 #: Marker tokens the fake scanner keys on, and the rule each maps to.
@@ -241,3 +248,158 @@ def test_render_report_summarizes_counts(target: Path) -> None:
 def test_make_rescan_returns_callable() -> None:
     assert callable(make_rescan())
     assert callable(make_rescan([ScannerTool.TRIVY]))
+
+
+# ---------------------------------------------------------------------------
+# fix-generation prompt (the generation half of the loop)
+# ---------------------------------------------------------------------------
+def test_render_fix_prompt_includes_location_and_fences_untrusted_code() -> None:
+    finding = Finding(
+        id="sca-1",
+        tool=ScannerTool.TRIVY,
+        type=FindingType.SCA,
+        rule_id="CVE-2020-1747",
+        title="pyyaml RCE",
+        severity_raw="CRITICAL",
+        file="requirements.txt",
+        line=0,
+        code_snippet="pyyaml==5.1",
+        package="pyyaml",
+        installed_version="5.1",
+        fixed_version="5.4",
+    )
+    decision = TriageDecision(
+        finding_id=finding.id,
+        verdict=Verdict.TRUE_POSITIVE,
+        severity=Severity.CRITICAL,
+        confidence=0.95,
+        business_impact="RCE via unsafe deserialization in a payments service.",
+        reasoning="Known CVE with a published fixed version.",
+        recommended_action=Action.DRAFT_PR,
+        remediation="Bump pyyaml to 5.4.",
+    )
+    prompt = render_fix_prompt(finding, decision)
+
+    assert "requirements.txt" in prompt
+    assert "Bump pyyaml to 5.4." in prompt
+    # SCA package details are surfaced so the model can pin the fixed version.
+    assert "fixed_version: 5.4" in prompt
+    # The finding's own code is fenced as untrusted data, not instructions.
+    assert "UNTRUSTED FINDING CONTENT" in prompt
+
+
+def test_make_rescan_delegates_to_scanner_layer(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    captured: dict[str, object] = {}
+
+    def _fake_run_scans(path: Path, tools: object = None) -> list[Finding]:
+        captured["path"] = path
+        captured["tools"] = tools
+        return [_finding("R1-insecure")]
+
+    monkeypatch.setattr(scanners, "run_scans", _fake_run_scans)
+    rescan = make_rescan([ScannerTool.TRIVY])
+    result = rescan(tmp_path)
+
+    assert [f.rule_id for f in result] == ["R1-insecure"]
+    assert captured["path"] == tmp_path
+    assert captured["tools"] == [ScannerTool.TRIVY]
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+def _write_cli_inputs(
+    tmp_path: Path, findings: list[Finding], patches: list[FixPatch]
+) -> tuple[Path, Path]:
+    """Write findings/patches JSON files and return their paths."""
+    findings_path = tmp_path / "findings.json"
+    patches_path = tmp_path / "patches.json"
+    findings_path.write_text(
+        json.dumps([f.model_dump(mode="json") for f in findings]), encoding="utf-8"
+    )
+    patches_path.write_text(
+        json.dumps([p.model_dump(mode="json") for p in patches]), encoding="utf-8"
+    )
+    return findings_path, patches_path
+
+
+def test_cli_resolved_returns_zero_and_writes_report(
+    monkeypatch: pytest.MonkeyPatch, target: Path, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(revalidate, "make_rescan", lambda: _fake_rescan)
+    finding = _finding("R1-insecure")
+    patch = FixPatch(
+        finding_id=finding.id,
+        edits=[FileEdit(file="vuln.txt", search="INSECURE", replace="SAFE")],
+    )
+    findings_path, patches_path = _write_cli_inputs(tmp_path, [finding], [patch])
+    report_path = tmp_path / "report.md"
+
+    code = revalidate.main(
+        [
+            "--target",
+            str(target),
+            "--findings",
+            str(findings_path),
+            "--patches",
+            str(patches_path),
+            "--report",
+            str(report_path),
+        ]
+    )
+
+    assert code == 0
+    assert "resolved" in report_path.read_text(encoding="utf-8")
+
+
+def test_cli_unresolved_returns_nonzero(
+    monkeypatch: pytest.MonkeyPatch, target: Path, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(revalidate, "make_rescan", lambda: _fake_rescan)
+    finding = _finding("R1-insecure")
+    patch = FixPatch(
+        finding_id=finding.id,
+        edits=[FileEdit(file="vuln.txt", search="HARMLESS", replace="TIDIED")],
+    )
+    findings_path, patches_path = _write_cli_inputs(tmp_path, [finding], [patch])
+
+    code = revalidate.main(
+        [
+            "--target",
+            str(target),
+            "--findings",
+            str(findings_path),
+            "--patches",
+            str(patches_path),
+        ]
+    )
+
+    assert code == 1
+
+
+def test_cli_skips_patch_without_matching_finding(
+    monkeypatch: pytest.MonkeyPatch, target: Path, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(revalidate, "make_rescan", lambda: _fake_rescan)
+    # A patch whose finding_id has no matching finding is skipped with a warning;
+    # with no validatable pairs the run returns non-zero.
+    orphan = FixPatch(
+        finding_id="does-not-exist",
+        edits=[FileEdit(file="vuln.txt", search="INSECURE", replace="SAFE")],
+    )
+    findings_path, patches_path = _write_cli_inputs(tmp_path, [], [orphan])
+
+    code = revalidate.main(
+        [
+            "--target",
+            str(target),
+            "--findings",
+            str(findings_path),
+            "--patches",
+            str(patches_path),
+        ]
+    )
+
+    assert code == 1

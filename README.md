@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/rohanbatrain/autotriage/actions/workflows/ci.yml/badge.svg)](https://github.com/rohanbatrain/autotriage/actions/workflows/ci.yml)
 ![coverage](https://img.shields.io/badge/coverage-~90%25-brightgreen)
-![tests](https://img.shields.io/badge/tests-63-brightgreen)
+![tests](https://img.shields.io/badge/tests-68-brightgreen)
 ![mypy](https://img.shields.io/badge/mypy-strict-blue)
 ![lint](https://img.shields.io/badge/lint-ruff-000000)
 ![python](https://img.shields.io/badge/python-3.11%2B-blue)
@@ -136,7 +136,7 @@ The quality gate is enforced automatically in CI (`.github/workflows/ci.yml`), o
 
 - **PEP 8 / PEP 257** — `ruff check` (incl. `D` pydocstyle + `B` bugbear rules) and `ruff format --check`.
 - **PEP 484 strict typing** — `mypy --strict` over `src` (the package ships a `py.typed` marker).
-- **Test pyramid — 63 tests, ~90% branch coverage** (gate: `--cov-fail-under=80`):
+- **Test pyramid — 68 tests, ~89% branch coverage** (gate: `--cov-fail-under=80`):
   unit (schema, scanners, tools, eval, **fix-validation**) · **integration** (full scan→triage→act flow with a *mocked* LLM, no network) · **property-based** ([Hypothesis](https://hypothesis.readthedocs.io/): normalizers never crash, guardrail invariants always hold) · **golden/snapshot** (ticket & PR rendering) · **CLI**.
 - **Security self-scanning** — `bandit -r src` (SAST on our own code) and `pip-audit` (dependency CVE audit) run in CI.
 - **Supply chain** — Dependabot (pip + actions), minimum-version floors, `detect-private-key` pre-commit hook.
@@ -163,7 +163,7 @@ This is a strong, tested reference implementation with production-*minded* engin
 
 | Implemented | Roadmap (see [operations.md](docs/operations.md) · [threat-model.md](docs/threat-model.md)) |
 |---|---|
-| Typed contracts, strict typing, 63 tests @ ~90% cov, matrix CI, bandit + pip-audit | Async triage + rate-limit/backoff (currently sequential) |
+| Typed contracts, strict typing, 68 tests @ ~89% cov, matrix CI, bandit + pip-audit | Async triage + rate-limit/backoff (currently sequential) |
 | Guardrails: confidence threshold, fail-closed escalation, prompt-injection defense | Real GitHub/Jira actions (PRs are drafted as Markdown today) |
 | **Fix-validation loop**: patch an isolated copy, re-scan, accept only if verifiably resolved | Auto-apply validated fixes as real PRs; multi-file patches at repo scale |
 | Structured JSON logging with `run_id`, env-driven config (`config.py`) | Cost/latency metrics, alerting, secret **redaction** in ticket bodies |

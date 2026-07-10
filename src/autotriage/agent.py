@@ -39,6 +39,7 @@ from autotriage.schema import (
     TriageDecision,
     Verdict,
 )
+from autotriage.stub import stub_triage_finding
 
 #: Fallback action to use when a model omits ``recommended_action``, keyed by
 #: the verdict it did provide.
@@ -284,8 +285,9 @@ def triage_finding(
 
     Args:
         finding: The normalized scanner finding to triage.
-        backend: ``"api"`` (anthropic Messages API, default and most reliable)
-            or ``"sdk"`` (Claude Agent SDK structured output).
+        backend: ``"api"`` (anthropic Messages API, default and most reliable),
+            ``"sdk"`` (Claude Agent SDK structured output), or ``"stub"`` (a
+            deterministic offline heuristic that needs no API key).
         model: Optional model override; defaults to ``AUTOTRIAGE_MODEL`` or
             :data:`DEFAULT_MODEL`.
 
@@ -294,15 +296,21 @@ def triage_finding(
 
     Raises:
         RuntimeError: If ``ANTHROPIC_API_KEY`` is unset or a backend fails.
-        ValueError: If ``backend`` is not ``"api"`` or ``"sdk"``.
+        ValueError: If ``backend`` is not ``"api"``, ``"sdk"`` or ``"stub"``.
     """
+    if backend == "stub":
+        # Offline heuristic: no API key required, so CI on untrusted (fork) PRs
+        # and credential-less demos still produce a triage decision.
+        return stub_triage_finding(finding)
     _require_api_key()
     resolved = _resolve_model(model)
     if backend == "api":
         return _triage_via_api(finding, model=resolved)
     if backend == "sdk":
         return _triage_via_sdk(finding, model=resolved)
-    raise ValueError(f"Unknown backend {backend!r}; expected 'api' or 'sdk'.")
+    raise ValueError(
+        f"Unknown backend {backend!r}; expected 'api', 'sdk' or 'stub'."
+    )
 
 
 def _propose_fix_via_api(

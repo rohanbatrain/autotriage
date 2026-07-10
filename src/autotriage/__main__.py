@@ -19,7 +19,9 @@ from autotriage import observability
 from autotriage.agent import DEFAULT_MODEL, triage_finding
 from autotriage.config import Settings, get_settings
 from autotriage.observability import configure_logging, new_run_id
+from autotriage.report import render_markdown_report
 from autotriage.schema import Action, Finding, TriageDecision
+from autotriage.stub import raw_severity_rank
 from autotriage.tools import assign_owner, dispatch
 
 #: Findings input has no configurable setting; keep its historical default here.
@@ -65,9 +67,12 @@ def _build_parser(settings: Settings) -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--backend",
-        choices=("api", "sdk"),
+        choices=("api", "sdk", "stub"),
         default=settings.backend,
-        help="Triage backend to use (default: %(default)s).",
+        help=(
+            "Triage backend: 'api'/'sdk' call Claude; 'stub' is a deterministic "
+            "offline heuristic needing no API key (default: %(default)s)."
+        ),
     )
     parser.add_argument(
         "--model",
@@ -102,6 +107,24 @@ def _build_parser(settings: Settings) -> argparse.ArgumentParser:
         type=Path,
         default=settings.pr_dir,
         help="Directory for remediation PR drafts (default: %(default)s).",
+    )
+    parser.add_argument(
+        "--summary-md",
+        type=Path,
+        default=None,
+        help=(
+            "Also write a Markdown triage report to this path (used by CI for "
+            "the job summary and the PR comment)."
+        ),
+    )
+    parser.add_argument(
+        "--max-findings",
+        type=int,
+        default=None,
+        help=(
+            "Cost guardrail: triage at most N findings, keeping the most severe "
+            "(default: no cap)."
+        ),
     )
     return parser
 
@@ -152,6 +175,22 @@ def main() -> int:
     args = _build_parser(settings).parse_args()
     findings = _load_findings(args.findings)
 
+    total_findings = len(findings)
+    capped_from: int | None = None
+    if args.max_findings is not None and total_findings > args.max_findings:
+        findings = sorted(findings, key=raw_severity_rank, reverse=True)[
+            : args.max_findings
+        ]
+        capped_from = total_findings
+        _LOGGER.warning(
+            "findings capped",
+            extra={
+                "event": "run.capped",
+                "kept": len(findings),
+                "total": total_findings,
+            },
+        )
+
     _LOGGER.info(
         "run started",
         extra={
@@ -194,6 +233,21 @@ def main() -> int:
             "dry_run": args.dry_run,
         },
     )
+
+    if args.summary_md is not None:
+        report = render_markdown_report(
+            findings,
+            decisions,
+            backend=args.backend,
+            dry_run=args.dry_run,
+            capped_from=capped_from,
+        )
+        args.summary_md.parent.mkdir(parents=True, exist_ok=True)
+        args.summary_md.write_text(report, encoding="utf-8")
+        _LOGGER.info(
+            "summary written",
+            extra={"event": "run.summary", "path": str(args.summary_md)},
+        )
 
     _print_summary(decisions, actions, dry_run=args.dry_run)
     return 0

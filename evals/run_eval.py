@@ -31,100 +31,18 @@ from autotriage.eval_harness import (  # noqa: E402
     render_report,
     score,
 )
-from autotriage.schema import (  # noqa: E402
-    Action,
-    Finding,
-    FindingType,
-    Severity,
-    TriageDecision,
-    Verdict,
-)
+from autotriage.schema import Finding  # noqa: E402
+from autotriage.stub import stub_triage  # noqa: E402
 
 _DEFAULT_FINDINGS = _REPO_ROOT / "fixtures" / "findings.sample.json"
 _DEFAULT_LABELS = Path(__file__).resolve().parent / "labeled_findings.json"
 _DEFAULT_REPORT = Path(__file__).resolve().parent / "report.md"
-
-#: Maps a scanner's raw severity token onto the normalized ladder.
-_SEVERITY_MAP: dict[str, Severity] = {
-    "critical": Severity.CRITICAL,
-    "error": Severity.HIGH,
-    "high": Severity.HIGH,
-    "warning": Severity.MEDIUM,
-    "medium": Severity.MEDIUM,
-    "moderate": Severity.MEDIUM,
-    "low": Severity.LOW,
-    "info": Severity.INFO,
-    "unknown": Severity.MEDIUM,
-}
 
 
 def _load_findings(path: Path) -> list[Finding]:
     """Load and validate normalized findings from ``path``."""
     data = json.loads(path.read_text(encoding="utf-8"))
     return [Finding.model_validate(item) for item in data]
-
-
-def _looks_like_false_positive(finding: Finding) -> bool:
-    """Heuristically decide whether a finding is a documented false positive."""
-    text = finding.description.lower()
-    return "false positive" in text or "-fp-" in finding.id.lower()
-
-
-def _stub_severity(finding: Finding) -> Severity:
-    """Assign a severity to a true-positive finding without an LLM.
-
-    Hardcoded live secrets are always treated as ``critical``; everything else
-    is mapped from the scanner's own severity token.
-    """
-    if finding.type is FindingType.SECRET:
-        return Severity.CRITICAL
-    return _SEVERITY_MAP.get(finding.severity_raw.strip().lower(), Severity.MEDIUM)
-
-
-def stub_triage(findings: Sequence[Finding]) -> list[TriageDecision]:
-    """Triage findings with a deterministic, near-perfect offline heuristic.
-
-    This lets the evaluation run with no API key (for CI and demos). It marks
-    documented false positives as ``false_positive`` and everything else as a
-    ``true_positive`` with a severity derived from the scanner output.
-
-    Args:
-        findings: Normalized findings to triage.
-
-    Returns:
-        One :class:`~autotriage.schema.TriageDecision` per finding.
-    """
-    decisions: list[TriageDecision] = []
-    for finding in findings:
-        if _looks_like_false_positive(finding):
-            decisions.append(
-                TriageDecision(
-                    finding_id=finding.id,
-                    verdict=Verdict.FALSE_POSITIVE,
-                    severity=Severity.INFO,
-                    confidence=0.95,
-                    business_impact="No exploitable impact; benign match.",
-                    reasoning="Matches a documented non-exploitable pattern.",
-                    recommended_action=Action.SUPPRESS,
-                    cwe=finding.cwe,
-                )
-            )
-            continue
-        decisions.append(
-            TriageDecision(
-                finding_id=finding.id,
-                verdict=Verdict.TRUE_POSITIVE,
-                severity=_stub_severity(finding),
-                confidence=0.9,
-                business_impact="Exploitable weakness in a payments-adjacent service.",
-                reasoning="Scanner signal is consistent with a real vulnerability.",
-                recommended_action=(
-                    Action.DRAFT_PR if finding.fixed_version else Action.OPEN_TICKET
-                ),
-                cwe=finding.cwe,
-            )
-        )
-    return decisions
 
 
 def _build_parser() -> argparse.ArgumentParser:

@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `autotriage.agent.propose_fix` (forced `submit_fix` tool call); CLI
   `python -m autotriage.revalidate`; design notes in
   [docs/fix-validation.md](docs/fix-validation.md); a real Trivy-verified example
-  under [examples/fix-validation/](examples/fix-validation/); and 14 offline
+  under [examples/fix-validation/](examples/fix-validation/); and 19 offline
   tests covering the full status matrix plus the ambiguous-match and
   path-traversal guards.
 - Enterprise operations & governance docs: operations (SLOs/SLIs, error budgets,
