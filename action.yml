@@ -1,0 +1,139 @@
+name: "AutoTriage security triage"
+description: >-
+  Scan a repository with Semgrep/Trivy/Gitleaks, triage every finding with an
+  autonomous Claude agent, and post the verdicts as a pull-request comment.
+author: "rohanbatrain"
+branding:
+  icon: "shield"
+  color: "purple"
+
+inputs:
+  scan-path:
+    description: "Directory to scan."
+    required: false
+    default: "."
+  anthropic-api-key:
+    description: >-
+      Anthropic API key for live LLM triage. When empty (e.g. a fork PR that
+      cannot read secrets), AutoTriage falls back to the deterministic offline
+      stub backend so the run still produces a triage summary.
+    required: false
+    default: ""
+  model:
+    description: "Model id for the triage agent (defaults to the tool default)."
+    required: false
+    default: ""
+  max-findings:
+    description: "Cost guardrail: triage at most this many findings (most severe first)."
+    required: false
+    default: "80"
+  comment:
+    description: "Post/update a pull-request comment with the triage summary."
+    required: false
+    default: "true"
+  github-token:
+    description: "Token used to post the PR comment (needs pull-requests: write)."
+    required: false
+    default: ${{ github.token }}
+  python-version:
+    description: "Python version to run the agent on."
+    required: false
+    default: "3.12"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install AutoTriage
+      shell: bash
+      run: pip install "${{ github.action_path }}[agent]"
+
+    - name: Install Semgrep
+      shell: bash
+      run: pip install semgrep
+
+    - name: Install Trivy
+      uses: aquasecurity/setup-trivy@v0.2.0
+
+    - name: Install Gitleaks
+      shell: bash
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/gitleaks/gitleaks/master/scripts/install.sh \
+          | sh -s -- -b "$RUNNER_TEMP/bin"
+        echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+    - name: Run scanners
+      shell: bash
+      run: python -m autotriage.scanners "${{ inputs.scan-path }}" -o findings.json
+
+    - name: Triage findings
+      shell: bash
+      env:
+        ANTHROPIC_API_KEY: ${{ inputs.anthropic-api-key }}
+        AUTOTRIAGE_MODEL: ${{ inputs.model }}
+      run: |
+        set -euo pipefail
+        # Live LLM when a key is present; deterministic offline stub otherwise,
+        # so untrusted (fork) PRs still get a triage summary instead of a red X.
+        if [ -n "${ANTHROPIC_API_KEY}" ]; then
+          BACKEND=api
+        else
+          BACKEND=stub
+          echo "::notice title=AutoTriage::No API key available; using the offline stub backend."
+        fi
+        MODEL_ARG=()
+        if [ -n "${AUTOTRIAGE_MODEL}" ]; then MODEL_ARG=(--model "${AUTOTRIAGE_MODEL}"); fi
+        python -m autotriage \
+          --findings findings.json \
+          --backend "$BACKEND" \
+          --max-findings "${{ inputs.max-findings }}" \
+          --tickets-dir autotriage-out/tickets \
+          --pr-dir autotriage-out/pull_requests \
+          --tracker autotriage-out/TRACKER.md \
+          --summary-md autotriage-out/summary.md \
+          "${MODEL_ARG[@]}"
+
+    - name: Publish job summary
+      if: always()
+      shell: bash
+      run: |
+        if [ -f autotriage-out/summary.md ]; then
+          cat autotriage-out/summary.md >> "$GITHUB_STEP_SUMMARY"
+        fi
+
+    - name: Comment on the pull request
+      if: ${{ inputs.comment == 'true' && github.event_name == 'pull_request' }}
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        REPO: ${{ github.repository }}
+        PR: ${{ github.event.pull_request.number }}
+      run: |
+        set -euo pipefail
+        [ -f autotriage-out/summary.md ] || { echo "no summary to post"; exit 0; }
+        jq -Rs '{body: .}' autotriage-out/summary.md > body.json
+        # Upsert: update our own marked comment if it exists, else create one.
+        ID=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+              --jq '.[] | select(.body | contains("<!-- autotriage-report -->")) | .id' \
+              | head -n1 || true)
+        if [ -n "$ID" ]; then
+          gh api --method PATCH "repos/$REPO/issues/comments/$ID" --input body.json >/dev/null
+          echo "Updated comment $ID"
+        else
+          gh api --method POST "repos/$REPO/issues/$PR/comments" --input body.json >/dev/null
+          echo "Created triage comment"
+        fi
+
+    - name: Upload triage artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: autotriage-output
+        path: |
+          findings.json
+          autotriage-out/
+        if-no-files-found: ignore
