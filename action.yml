@@ -70,8 +70,13 @@ runs:
     - name: Install Gitleaks
       shell: bash
       run: |
-        curl -sSfL https://raw.githubusercontent.com/gitleaks/gitleaks/master/scripts/install.sh \
-          | sh -s -- -b "$RUNNER_TEMP/bin"
+        set -euo pipefail
+        GL_VER=8.30.1
+        mkdir -p "$RUNNER_TEMP/bin"
+        curl -sSfL \
+          "https://github.com/gitleaks/gitleaks/releases/download/v${GL_VER}/gitleaks_${GL_VER}_linux_x64.tar.gz" \
+          -o "$RUNNER_TEMP/gitleaks.tar.gz"
+        tar -xzf "$RUNNER_TEMP/gitleaks.tar.gz" -C "$RUNNER_TEMP/bin" gitleaks
         echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
 
     - name: Run scanners
